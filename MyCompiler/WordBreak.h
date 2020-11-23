@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <regex>
 #include <string>
 #include "Token.h"
 #include "LinkedList.h"
@@ -16,6 +17,7 @@ class WordBreak
 		int count;
 		string temp;
 		Token token;
+		bool is_another_dot = false;
 		int lineNo = 1;
 	public:
 	WordBreak(string inputFile)
@@ -30,10 +32,87 @@ class WordBreak
 
 	void mySplit() 
 	{
+		regex isdigit("[0-9]+");
+		regex isAlphaDigit("[A-Za-z0-9_]+");
 		string temp = "";
 		for (int i = 0; i < count; i++)
 		{
 			bool not_any = false;
+
+
+			if (words[i] == '\/' && words[i + 1] == '*')
+			{
+				not_any = true;
+				//not_any true nhi kiya kiyonke agla character hamein identifier me daalna he
+				i += 2;
+				while (true && i <= count)
+				{
+					if (words[i + 1] == '\*' && words[i + 2] == '\/')
+					{
+						break;
+					}
+					if (words[i] == '\n')
+					{
+						lineNo++;
+					}
+					i++;
+				}
+				i += 3;
+			}
+
+
+
+			if (words[i] == '\/' && words[i + 1] == '\/')
+			{
+				not_any = true;
+				while (words[i] != '\n')
+				{
+					i++;
+				}
+			}
+
+
+			if (words[i] == '.') 
+			{
+				not_any = true;
+				if (!regex_match(temp, isdigit)) 
+				{
+					token.generateToken(temp, lineNo);
+					temp = "";
+				}
+				if(regex_match(string(1,words[i+1]),isdigit))
+				{
+					//Dot add karaya he
+					temp += words[i];		
+					i++;	
+					//Dot ke baad wala digit check horaha 
+					while (regex_match(string(1,words[i]), isAlphaDigit))
+					{
+						temp += words[i];
+						i++;
+					}
+					token.generateToken(temp, lineNo);
+					temp = "";
+				}
+				else
+				{
+					token.generateToken(temp, lineNo);
+					temp = "";
+					token.generateToken(".", lineNo);
+					i++;
+					while (regex_match(string(1, words[i]), isAlphaDigit))
+					{
+						temp += words[i];
+						i++;
+					}
+					token.generateToken(temp, lineNo);
+					temp = "";
+					i--;
+				}
+			}
+			
+
+
 
 			if (words[i] == '{' || words[i] == '(' || words[i] == '[' || words[i] == '}' || words[i] == ')' || words[i] == ']' || words[i] == ' ' || words[i] == ';' || words[i] == '\n' || words[i] == ',')
 			{
@@ -153,10 +232,11 @@ class WordBreak
 
 			if (words[i] == '\"')
 			{
-				i++;
 				not_any = true;
 				token.generateToken(temp, lineNo);
 				temp = "";
+				temp += words[i];
+				i++;
 				while (words[i] != '\"' && i < count)
 				{
 					if (words[i] == '\\')
@@ -164,7 +244,7 @@ class WordBreak
 						temp += words[i];
 						if (words[i + 1] == '\n')
 						{
-							cout << lineNo << endl;
+							temp += words[i + 1];
 							lineNo++;
 						}
 						else 
@@ -183,28 +263,83 @@ class WordBreak
 						i++;
 					}
 				}
+				if (words[i] == '\"')temp += words[i];
+				token.generateToken(temp, lineNo);
+				temp = "";
+				if (words[i] == '\n')
+				{
+					lineNo++;
+				}
+			}
 
-				if (i < count)
+
+			//Character me ek flaw he ke wo ' or line breaker ko bhi as a invalid le raha he 
+			if (words[i] == '\'')
+			{
+				token.generateToken(temp, lineNo);
+				temp = "";
+				not_any = true;
+				temp += words[i];
+				i++;
+				if (words[i] == '\\')
 				{
-					token.generateToken(temp, lineNo);
-					temp = "";
+					temp += words[i];
+					i++;
 				}
-				else
+				temp += words[i];
+				if (words[i] == '\n')lineNo++;
+				i++;
+				if (words[i] == '\'')
 				{
-					token.generateToken("InvalidLexene", "\"" + temp, lineNo);
-					temp = "";
+					temp += words[i];
 				}
+				if (words[i] != '\'')
+				{
+					i--;
+				}
+				token.generateToken(temp, lineNo);
+				temp = "";
 			}
 
 
 
 			if(!not_any)
 			{
-				temp += words[i];
+				temp += words[i];	
 			}
 		}
 		token.generateToken(temp, lineNo);
 	}
 };
+
+
+
+////didnot do it, had to go through again 
+			//if (words[i] == '\'')
+			//{
+			//	not_any = true;
+			//	i++;
+			//	//if character is '\n'
+			//	if (words[i] == '\\' && words[i+2] == '\'')
+			//	{
+			//		temp += words[i];
+			//		temp += words[i + 1];
+			//		i += 2;
+			//		token.generateToken(temp, lineNo);
+			//	}
+			//	//if character is 'a'
+			//	else if (words[i] != '\\' && words[i+1] == '\'')
+			//	{
+			//		temp += words[i];
+			//		i += 1;
+			//		token.generateToken(temp, lineNo);
+			//	}
+			//	// if character is 'a or '\\ 
+			//	else
+			//	{
+			//		temp += "\'" + words[i];
+			//		token.generateToken("InvalidLexene", temp, lineNo);
+			//	}
+			//}
 
 
