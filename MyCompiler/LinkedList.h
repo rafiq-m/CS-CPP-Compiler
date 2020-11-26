@@ -41,8 +41,8 @@ public:
 	{
 		Node* troot = root;
 		while (troot != NULL) {
-			cout << troot->class_part << troot->value_part << troot->line_no << endl;
-			troot->next = troot;
+			cout << troot->class_part <<", "<< troot->value_part <<", "<< troot->line_no << endl;
+			troot = troot->next;
 		}
 	}
 

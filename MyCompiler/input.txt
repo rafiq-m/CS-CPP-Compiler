@@ -1,8 +1,31 @@
-55.abc6.55b.89.a99c
-
-/*'r'
-'\a'
-'\
-asd
+'a'
 '\a
-das
+'ar'
+'\s'
+'a
+'ar
+string
+class animal
+{
+string s = "Osama";
+string h = "haris";
+int a = 67;
+int b=77;
+char d = 'a';
+char ds = '\a';
+public void main()
+{
+if(_s==h)
+{
+//do this;
+}
+else if (\s!= h)
+{
+//do this
+}
+else if( 9a>b)
+{
+a++;
+}
+else
+while(a+b)

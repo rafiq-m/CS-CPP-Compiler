@@ -24,10 +24,12 @@ class WordBreak
 	{
 		count = 0;
 		ifstream myInputFile(inputFile);
-		while (myInputFile.get(words[count])) {
+		while (myInputFile.get(words[count]))
+		{
 			count++;
 		}
 		mySplit();
+		show();
 	}
 
 	void mySplit() 
@@ -113,11 +115,11 @@ class WordBreak
 			
 
 
-
+			//Done
 			if (words[i] == '{' || words[i] == '(' || words[i] == '[' || words[i] == '}' || words[i] == ')' || words[i] == ']' || words[i] == ' ' || words[i] == ';' || words[i] == '\n' || words[i] == ',')
 			{
 				not_any = true;
-				if (words[i] == ' ' || words[i] == ';')
+				if (words[i] == ' ')
 				{
 					token.generateToken(temp, lineNo);
 					temp = "";
@@ -131,13 +133,13 @@ class WordBreak
 				else
 				{
 					token.generateToken(temp, lineNo);
-					token.generateToken(string(1, words[i]), lineNo);
+					token.generateToken(string(1, words[i]),string(1, words[i]), lineNo);
 					temp = "";
 				}
 			}
 
 
-
+			//Done
 			if (words[i] == '+' || words[i] == '-' || words[i] == '*' || words[i] == '/' || words[i] == '%')
 			{
 				not_any = true;
@@ -241,10 +243,8 @@ class WordBreak
 				{
 					if (words[i] == '\\')
 					{
-						temp += words[i];
 						if (words[i + 1] == '\n')
 						{
-							temp += words[i + 1];
 							lineNo++;
 						}
 						else 
@@ -281,21 +281,44 @@ class WordBreak
 				not_any = true;
 				temp += words[i];
 				i++;
-				if (words[i] == '\\')
+				if (words[i] == '\n')
 				{
-					temp += words[i];
-					i++;
+					token.generateToken(temp, lineNo);
+					temp = "";
+					lineNo++;
 				}
-				temp += words[i];
-				if (words[i] == '\n')lineNo++;
-				i++;
-				if (words[i] == '\'')
-				{
-					temp += words[i];
-				}
-				if (words[i] != '\'')
+				else if (words[i] == '\'')
 				{
 					i--;
+				}
+				else
+				{
+					if (words[i] == '\\')
+					{
+						temp += words[i];
+						i++;
+						temp += words[i];
+						i++;
+						if (words[i] == '\'') 
+							temp += words[i];
+						else if (words[i] == '\n')
+						{
+							token.generateToken(temp, lineNo);
+							temp = "";
+							lineNo++;
+						}
+					}
+					else
+					{
+						temp += words[i];
+						i++;
+						if (words[i] == '\'')
+							temp += words[i];
+
+						else
+							i--;
+
+					}
 				}
 				token.generateToken(temp, lineNo);
 				temp = "";
@@ -310,36 +333,11 @@ class WordBreak
 		}
 		token.generateToken(temp, lineNo);
 	}
+
+	void show()
+	{
+		token.printList();
+	}
 };
-
-
-
-////didnot do it, had to go through again 
-			//if (words[i] == '\'')
-			//{
-			//	not_any = true;
-			//	i++;
-			//	//if character is '\n'
-			//	if (words[i] == '\\' && words[i+2] == '\'')
-			//	{
-			//		temp += words[i];
-			//		temp += words[i + 1];
-			//		i += 2;
-			//		token.generateToken(temp, lineNo);
-			//	}
-			//	//if character is 'a'
-			//	else if (words[i] != '\\' && words[i+1] == '\'')
-			//	{
-			//		temp += words[i];
-			//		i += 1;
-			//		token.generateToken(temp, lineNo);
-			//	}
-			//	// if character is 'a or '\\ 
-			//	else
-			//	{
-			//		temp += "\'" + words[i];
-			//		token.generateToken("InvalidLexene", temp, lineNo);
-			//	}
-			//}
 
 

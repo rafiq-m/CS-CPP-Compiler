@@ -1,7 +1,7 @@
 ﻿  MyCompiler.cpp
-C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(43,20): warning C4129:  '/': unrecognized character escape sequence
-C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(50,26): warning C4129:  '*': unrecognized character escape sequence
-C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(50,50): warning C4129:  '/': unrecognized character escape sequence
-C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(65,20): warning C4129:  '/': unrecognized character escape sequence
-C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(65,44): warning C4129:  '/': unrecognized character escape sequence
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(45,20): warning C4129:  '/': unrecognized character escape sequence
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(52,26): warning C4129:  '*': unrecognized character escape sequence
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(52,50): warning C4129:  '/': unrecognized character escape sequence
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(67,20): warning C4129:  '/': unrecognized character escape sequence
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(67,44): warning C4129:  '/': unrecognized character escape sequence
   MyCompiler.vcxproj -> C:\Users\Rafiq\Desktop\MyCompiler\Debug\MyCompiler.exe
