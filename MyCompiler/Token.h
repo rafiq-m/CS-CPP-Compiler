@@ -44,6 +44,8 @@ public:
 	void generateToken(string value_part, int line_no)
 	{
 		regex isalphabet("[_A-Za-z]");
+		regex floatrgx("[+-]{0,1}[0-9]*.[0-9]+");
+		regex digit("[+-]{0,1}[0-9]+");
 
 		if (value_part != "")
 		{
@@ -58,7 +60,7 @@ public:
 					}
 					else
 					{
-						list->append(CP, value_part, line_no);
+						list->append(CP, " _ ", line_no);
 					}
 				}
 				else
@@ -70,7 +72,7 @@ public:
 			{
 				if (value_part[value_part.size() - 1] == '\"')
 				{
-					list->append("string_const", value_part, line_no);
+					list->append("string_const", value_part.substr(1,value_part.size()-2), line_no);
 				}
 				else
 				{
@@ -81,15 +83,26 @@ public:
 			{
 				if (value_part[value_part.size() - 1] == '\'' && value_part.size() >= 3 && value_part.size() <= 4)
 				{
-					list->append("char_const", value_part, line_no);
+					list->append("char_const", value_part.substr(1,value_part.size()-2), line_no);
 				}
 				else
 				{
 					list->append("InvalidLexene", value_part, line_no);
 				}
 			}
-			regex floatrgx("[+-]{0,1}[0-9]*.[0-9]+");
-			regex digit("[+-]{0,1}[0-9]+");
+			else if (regex_match(value_part, digit))
+			{
+				list->append("Int_const", value_part, line_no);
+			}
+			else if (regex_match(value_part, floatrgx))
+			{
+				list->append("Float_const", value_part, line_no);
+			}
+			else
+			{
+				list->append("InvalidLexene", value_part, line_no);
+			}
+			
 		}
 	}
 

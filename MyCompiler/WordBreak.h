@@ -133,7 +133,7 @@ class WordBreak
 				else
 				{
 					token.generateToken(temp, lineNo);
-					token.generateToken(string(1, words[i]),string(1, words[i]), lineNo);
+					token.generateToken(string(1, words[i])," _ ", lineNo);
 					temp = "";
 				}
 			}
@@ -212,14 +212,14 @@ class WordBreak
 				{
 					token.generateToken(temp, lineNo);
 					temp = "";
-					token.generateToken("And", string(1, words[i]) + words[i + 1], lineNo);
+					token.generateToken(string(1, words[i]) + words[i + 1], " _ ", lineNo);
 					i++;
 				}
 				else if (words[i] == '|' && words[i+1] == '|')
 				{
 					token.generateToken(temp, lineNo);
 					temp = "";
-					token.generateToken("Or", string(1, words[i]) + words[i + 1], lineNo);
+					token.generateToken(string(1, words[i]) + words[i + 1], " _ ", lineNo);
 					i++;
 				}
 				else 
@@ -314,10 +314,8 @@ class WordBreak
 						i++;
 						if (words[i] == '\'')
 							temp += words[i];
-
 						else
 							i--;
-
 					}
 				}
 				token.generateToken(temp, lineNo);

@@ -11,8 +11,10 @@ string s = "Osama";
 string h = "haris";
 int a = 67;
 int b=77;
-char d = 'a';
+char d:d = 'a';
 char ds = '\a';
+invalid ds = 9123.231;
+ss ds = 92a.23a.123a.abc;
 public void main()
 {
 if(_s==h)
