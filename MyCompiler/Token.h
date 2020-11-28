@@ -27,9 +27,8 @@ public:
 		regex floatrgx("[+-]{0,1}[0-9]*.[0-9]+");
 		regex digit("[+-]{0,1}[0-9]+");
 		regex isID("([_a-zA-Z][_A-Za-z0-9]*[A-Za-z0-9])|[A-Za-z]");
-		regex extraSpaces("[\\t]+");
 
-		if (value_part != "" && !regex_match(value_part,extraSpaces))
+		if (value_part != "")
 		{
 			if (regex_match(string(1, value_part[0]), isalphabet))		//if alphabet or ID
 			{
