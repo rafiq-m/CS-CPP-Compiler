@@ -8,6 +8,7 @@ using namespace std;
 
 int main()
 {
+	//starts here
 	WordBreak* word = new WordBreak("input.txt");
 }
 

@@ -61,7 +61,7 @@ public:
 					list->append("InvalidLexene", value_part, line_no);
 				}
 			}
-			else if (value_part[0] == '\'')			//Character Constant ?
+			else if (value_part[0] == '\'')			//char constant
 			{
 				if (value_part[value_part.size() - 1] == '\'' && value_part.size() >= 3 && value_part.size() <= 4)
 				{
@@ -72,15 +72,15 @@ public:
 					list->append("InvalidLexene", value_part, line_no);
 				}
 			}
-			else if (regex_match(value_part, digit))
+			else if (regex_match(value_part, digit))	//if digit
 			{
 				list->append("Int_const", value_part, line_no);
 			}
-			else if (regex_match(value_part, floatrgx))
+			else if (regex_match(value_part, floatrgx))		//if float
 			{
 				list->append("Float_const", value_part, line_no);
 			}
-			else if (value_part == ".")
+			else if (value_part == ".")					//if dot
 			{
 				list->append(value_part," _ ", line_no);
 			}

@@ -28,7 +28,7 @@ class WordBreak
 		{
 			count++;
 		}
-		mySplit();
+		mySplit();		//breaks whole sentence into pieces
 		show();
 	}
 

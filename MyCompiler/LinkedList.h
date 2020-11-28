@@ -24,7 +24,8 @@ private:
 	Node* tail = nullptr;
 
 public:
-	void append(string class_part, string value_part, int line_no) {
+	void append(string class_part, string value_part, int line_no)		//append new node into linkedlist
+	{
 		Node* temp = new Node(class_part, value_part, line_no);
 		if (this->root == nullptr) {
 			this->root = temp;
