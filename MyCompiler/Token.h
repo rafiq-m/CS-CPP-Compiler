@@ -3,14 +3,12 @@
 #include<stdio.h>
 #include"LinkedList.h"
 
+
 using namespace std;
 
 class Token
 {
 private:
-	string CP;
-	string VP;
-	int lineNo;
 	LinkedList* list = new LinkedList();
 	string keyword[24] = { "if","else","for","while","void","return",
 		"break","continue","true","false","NULL","class","extends","private",
@@ -18,24 +16,6 @@ private:
 	string DT[6] = { "int","float","char","string","bool","var" };
 	
 public:
-	/*string getCP() {
-		return this->CP;
-	}
-	void setCP(string CP) {
-		this->CP = CP;
-	}
-	string getVP() {
-		return this->CP;
-	}
-	void setVP(string VP) {
-		this->VP = VP;
-	}
-	int getLineNo() {
-		return this->lineNo;
-	}
-	void setLineNo(int lineNo) {
-		this->lineNo = lineNo;
-	}*/
 	void generateToken(string class_part, string value_part, int line_no) 
 	{
 		if (value_part != "")
@@ -46,12 +26,14 @@ public:
 		regex isalphabet("[_A-Za-z]");
 		regex floatrgx("[+-]{0,1}[0-9]*.[0-9]+");
 		regex digit("[+-]{0,1}[0-9]+");
+		regex isID("([_a-zA-Z][_A-Za-z0-9]*[A-Za-z0-9])|[A-Za-z]");
+		regex extraSpaces("[\\t]+");
 
-		if (value_part != "")
+		if (value_part != "" && !regex_match(value_part,extraSpaces))
 		{
 			if (regex_match(string(1, value_part[0]), isalphabet))		//if alphabet or ID
 			{
-				if (isID(value_part))
+				if (regex_match(value_part, isID))
 				{
 					string CP = isKeyWord(value_part);
 					if (CP == "")
@@ -98,11 +80,14 @@ public:
 			{
 				list->append("Float_const", value_part, line_no);
 			}
+			else if (value_part == ".")
+			{
+				list->append(value_part," _ ", line_no);
+			}
 			else
 			{
 				list->append("InvalidLexene", value_part, line_no);
-			}
-			
+			}	
 		}
 	}
 
@@ -116,19 +101,6 @@ public:
 			}
 		}
 		return "";
-	}
-
-	bool isID(string word)
-	{
-		regex isID("([_a-zA-Z][_A-Za-z0-9]*[A-Za-z0-9])|[A-Za-z]");
-		if (regex_match(word, isID))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 	bool isDT(string word)

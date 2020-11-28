@@ -1,3 +1,30 @@
+if (words[i] == '{' || words[i] == '(' || words[i] == '[' || words[i] == '}' || words[i] == ')' || words[i] == ']' || words[i] == ' ' || words[i] == ';' || words[i] == '\n' || words[i] == ',')
+			{
+				not_any = true;
+				if (words[i] == ' ')
+				{
+					token.generateToken(temp, lineNo);
+					temp = "";
+				}
+				else if(words[i] == '\n')
+				{
+					token.generateToken(temp, lineNo);
+					lineNo++;
+					temp = "";
+				}
+				else
+				{
+					token.generateToken(temp, lineNo);
+					token.generateToken(string(1, words[i])," _ ", lineNo);
+					temp = "";
+				}
+			}
+
+
+
+
+/*
+
 'a'
 '\a
 'ar'

@@ -41,7 +41,6 @@ class WordBreak
 		{
 			bool not_any = false;
 
-
 			if (words[i] == '\/' && words[i + 1] == '*')
 			{
 				not_any = true;
@@ -62,8 +61,6 @@ class WordBreak
 				i += 3;
 			}
 
-
-
 			if (words[i] == '\/' && words[i + 1] == '\/')
 			{
 				not_any = true;
@@ -72,7 +69,6 @@ class WordBreak
 					i++;
 				}
 			}
-
 
 			if (words[i] == '.') 
 			{
@@ -113,10 +109,7 @@ class WordBreak
 				}
 			}
 			
-
-
-			//Done
-			if (words[i] == '{' || words[i] == '(' || words[i] == '[' || words[i] == '}' || words[i] == ')' || words[i] == ']' || words[i] == ' ' || words[i] == ';' || words[i] == '\n' || words[i] == ',')
+			if (words[i] == '{' || words[i] == '(' || words[i] == '[' || words[i] == '}' || words[i] == ')' || words[i] == ']' || words[i] == ' ' || words[i] == ';' || words[i] == '\n' || words[i] == ',' )
 			{
 				not_any = true;
 				if (words[i] == ' ')
@@ -138,8 +131,6 @@ class WordBreak
 				}
 			}
 
-
-			//Done
 			if (words[i] == '+' || words[i] == '-' || words[i] == '*' || words[i] == '/' || words[i] == '%')
 			{
 				not_any = true;
@@ -171,8 +162,6 @@ class WordBreak
 				}
 			}
 
-
-
 			if (words[i] == '=' || words[i] == '!' || words[i] == '<' || words[i] == '>')
 			{
 				not_any = true;
@@ -203,8 +192,6 @@ class WordBreak
 				}
 			}
 
-
-
 			if (words[i] == '&' || words[i] == '|')
 			{
 				not_any = true;
@@ -229,8 +216,6 @@ class WordBreak
 					token.generateToken("InvalidLexene", string(1, words[i]), lineNo);
 				}
 			}
-
-
 
 			if (words[i] == '\"')
 			{
@@ -272,8 +257,6 @@ class WordBreak
 				}
 			}
 
-
-			//Character me ek flaw he ke wo ' or line breaker ko bhi as a invalid le raha he 
 			if (words[i] == '\'')
 			{
 				token.generateToken(temp, lineNo);
@@ -322,11 +305,10 @@ class WordBreak
 				temp = "";
 			}
 
-
-
 			if(!not_any)
 			{
-				temp += words[i];	
+				if(words[i] != '\t' && words[i] != ' ')
+					temp += words[i];	
 			}
 		}
 		token.generateToken(temp, lineNo);
