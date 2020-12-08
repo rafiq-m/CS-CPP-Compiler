@@ -13,7 +13,7 @@ using namespace std;
 class WordBreak
 {
 	private:
-		char words[1000];
+		char words[10000];
 		int count;
 		string temp;
 		Token token;
@@ -73,7 +73,7 @@ class WordBreak
 			if (words[i] == '.') 
 			{
 				not_any = true;
-				if (!regex_match(temp, isdigit)) 
+				if (!regex_match(temp, isdigit)) //agar digit nhi he
 				{
 					token.generateToken(temp, lineNo);
 					temp = "";
@@ -91,6 +91,7 @@ class WordBreak
 					}
 					token.generateToken(temp, lineNo);
 					temp = "";
+					i--;
 				}
 				else
 				{
@@ -134,31 +135,39 @@ class WordBreak
 			if (words[i] == '+' || words[i] == '-' || words[i] == '*' || words[i] == '/' || words[i] == '%')
 			{
 				not_any = true;
+				token.generateToken(temp, lineNo);
+				temp = "";
 				if (words[i] == '+' && words[i + 1] == '+')
 				{
-					token.generateToken(temp, lineNo);
 					token.generateToken("Inc/Dec", string(1, words[i]) + words[i + 1], lineNo);
-					temp = "";
 					i++;
 				}
 				else if (words[i] == '-' && words[i + 1] == '-')
 				{
-					token.generateToken(temp, lineNo);
 					token.generateToken("Inc/Dec", string(1, words[i]) + words[i + 1], lineNo);
-					temp = "";
 					i++;
 				}
 				else if(words[i] == '+' || words[i] == '-')
 				{
-					token.generateToken(temp, lineNo);
-					token.generateToken("PM", string(1,words[i]), lineNo);
-					temp = "";
+					temp += words[i];
+					i++;
+					if (regex_match(string(1,words[i]), isdigit)) 
+					{					
+						while (regex_match(string(1, words[i]), isdigit))
+						{
+							temp += words[i];
+							i++;
+						}
+					}
+					else
+					{
+						token.generateToken("PM", temp, lineNo);
+						temp = "";
+					}
 				}
 				else 
 				{
-					token.generateToken(temp, lineNo);
 					token.generateToken("MDM", string(1,words[i]), lineNo);
-					temp = "";
 				}
 			}
 

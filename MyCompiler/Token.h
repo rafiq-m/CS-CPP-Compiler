@@ -24,7 +24,7 @@ public:
 	void generateToken(string value_part, int line_no)
 	{
 		regex isalphabet("[_A-Za-z]");
-		regex floatrgx("[+-]{0,1}[0-9]*.[0-9]+");
+		regex floatrgx("[+-]{0,1}[0-9]*[.][0-9]+");
 		regex digit("[+-]{0,1}[0-9]+");
 		regex isID("([_a-zA-Z][_A-Za-z0-9]*[A-Za-z0-9])|[A-Za-z]");
 
@@ -37,11 +37,18 @@ public:
 					string CP = isKeyWord(value_part);
 					if (CP == "")
 					{
-						list->append("ID", value_part, line_no);
+						if (isDT(value_part))
+						{
+							list->append("DT", value_part, line_no);
+						}
+						else
+						{
+							list->append("ID", value_part, line_no);
+						}
 					}
 					else
 					{
-						list->append(CP, " _ ", line_no);
+							list->append(CP, " _ ", line_no);
 					}
 				}
 				else

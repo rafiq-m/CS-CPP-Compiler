@@ -1,31 +1,78 @@
-if (words[i] == '{' || words[i] == '(' || words[i] == '[' || words[i] == '}' || words[i] == ')' || words[i] == ']' || words[i] == ' ' || words[i] == ';' || words[i] == '\n' || words[i] == ',')
-			{
-				not_any = true;
-				if (words[i] == ' ')
-				{
-					token.generateToken(temp, lineNo);
-					temp = "";
-				}
-				else if(words[i] == '\n')
-				{
-					token.generateToken(temp, lineNo);
-					lineNo++;
-					temp = "";
-				}
-				else
-				{
-					token.generateToken(temp, lineNo);
-					token.generateToken(string(1, words[i])," _ ", lineNo);
-					temp = "";
-				}
-			}
++=
 
 
 
+int hello = "Rafoq";
 
-/*
+string[] database = new string[24];     //we take lenngth of 24 because 4 strings were included and we generate another 20 more strings from the combination of it
+            Random random = new Random();
+            database[0] = "#123RTqao";  //client prerequesite string no 1
+            database[1] = "@450WEio";   //client prerequesite string no 2
+            database[2] = "123%4^Tv";   //client prerequesite string no 3
+            database[3] = "PL*75anq";   //client prerequesite string no 4
+            int count = 4;
+            for (int i = 0; i < 20; i++)
+            {
+                string[] s = { "#123RTqao", "@450WEio", "123%4^Tv", "PL*75anq" };
+                int mid = random.Next(0, s.Length);             //Generate Random numbers
+                string halfPart = s[mid].Substring(0, 4);       //take initial 4 characters from the above defined strings
+                bool flag = true;
+                bool up = false, lo = false, ld = false, d = false;
+                //loop it until we get the desired string
+                while (flag)
+                {
+                    int rand = random.Next(0,4);
+                    string anotherHalfPart = s[rand].Substring(3,s[rand].Length-3);
 
-'a'
+                    int rand1 = random.Next(0, 4);
+                    char character = anotherHalfPart[rand1];
+                    //check if string has upper case character
+                    if (Char.IsUpper(character) && !up)
+                    {
+                        halfPart += character;
+                        up = true;
+                    }
+                    //check if string has lower case character init
+                    if (Char.IsLower(character) && !lo)
+                    {
+                        halfPart += character;
+                        lo = true;
+                    }
+                    //check if our character is not a letter or a digit but a special case character
+                    if (!char.IsLetterOrDigit(character) && !ld)
+                    {
+                        halfPart += character;
+                        ld = true;
+                    }
+                    //check if character is a digit
+                    if (Char.IsDigit(character) && !d)
+                    {
+                        halfPart += character;
+                        d = true;
+                    }
+                    if (up && lo && ld && d)    
+                    {
+                        flag = false;
+                    }
+                }
+                bool last = false;
+                //check if our current made string does not contain present in database
+                foreach (string x in database)
+                {
+                    if (halfPart == x && last == false)
+                    {
+                        last = true;
+                    }
+                }
+                if (!last)
+                {
+                    database[count++] = halfPart;
+                    Console.WriteLine(halfPart);
+                }
+
+
+
+/*'a'
 '\a
 'ar'
 '\s'
@@ -36,8 +83,8 @@ class animal
 {
 string s = "Osama";
 string h = "haris";
-int a = 67;
-int b=77;
+int a = +67;
+int b=-77;
 char d:d = 'a';
 char ds = '\a';
 invalid ds = 9123.231;
