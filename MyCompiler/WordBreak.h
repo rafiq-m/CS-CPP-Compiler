@@ -150,14 +150,14 @@ class WordBreak
 				else if(words[i] == '+' || words[i] == '-')
 				{
 					temp += words[i];
-					i++;
-					if (regex_match(string(1,words[i]), isdigit)) 
-					{					
+					if (regex_match(string(1,words[i+1]), isdigit)) 
+					{	
+						/*i++;
 						while (regex_match(string(1, words[i]), isdigit))
 						{
 							temp += words[i];
 							i++;
-						}
+						}*/
 					}
 					else
 					{
@@ -243,7 +243,8 @@ class WordBreak
 						}
 						else 
 						{
-						temp += words[i + 1];
+							temp += words[i];
+							temp += words[i + 1];
 						}
 						i += 2;
 					}

@@ -1,4 +1,5 @@
 ﻿  MyCompiler.cpp
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\Token.h(29,20): warning C4129:  '.': unrecognized character escape sequence
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(44,20): warning C4129:  '/': unrecognized character escape sequence
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(51,26): warning C4129:  '*': unrecognized character escape sequence
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(51,50): warning C4129:  '/': unrecognized character escape sequence

@@ -24,9 +24,12 @@ public:
 	void generateToken(string value_part, int line_no)
 	{
 		regex isalphabet("[_A-Za-z]");
-		regex floatrgx("[+-]{0,1}[0-9]*[.][0-9]+");
+		regex floatrgx("[+-]{0,1}[0-9]*[\\.][0-9]+");
+		regex charConst("\\'([\\\\][torbn])\\'");
+		regex char1Const("\\'\.\\'");
 		regex digit("[+-]{0,1}[0-9]+");
 		regex isID("([_a-zA-Z][_A-Za-z0-9]*[A-Za-z0-9])|[A-Za-z]");
+		regex sttring("\"([a-zA-Z0-9]?([\\\\][torbn])?|[^a-zA-Z0-9\\\\])*\"");
 
 		if (value_part != "")
 		{
@@ -56,27 +59,13 @@ public:
 					list->append("InvalidLexene", value_part, line_no);
 				}
 			}
-			else if (value_part[0] == '\"')			//String constant?
+			else if (regex_match(value_part, sttring))			//String constant?
 			{
-				if (value_part[value_part.size() - 1] == '\"')
-				{
 					list->append("string_const", value_part.substr(1,value_part.size()-2), line_no);
-				}
-				else
-				{
-					list->append("InvalidLexene", value_part, line_no);
-				}
 			}
-			else if (value_part[0] == '\'')			//char constant
+			else if (regex_match(value_part, charConst) || regex_match(value_part, char1Const))			//char constant
 			{
-				if (value_part[value_part.size() - 1] == '\'' && value_part.size() >= 3 && value_part.size() <= 4)
-				{
-					list->append("char_const", value_part.substr(1,value_part.size()-2), line_no);
-				}
-				else
-				{
-					list->append("InvalidLexene", value_part, line_no);
-				}
+				list->append("char_const", value_part.substr(1,value_part.size()-2), line_no);
 			}
 			else if (regex_match(value_part, digit))	//if digit
 			{
