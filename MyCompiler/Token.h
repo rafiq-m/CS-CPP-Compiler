@@ -29,7 +29,7 @@ public:
 		regex char1Const("\\'\.\\'");
 		regex digit("[+-]{0,1}[0-9]+");
 		regex isID("([_a-zA-Z][_A-Za-z0-9]*[A-Za-z0-9])|[A-Za-z]");
-		regex sttring("\"([a-zA-Z0-9]?([\\\\][torbn])?|[^a-zA-Z0-9\\\\])*\"");
+		regex sttring("\"([a-zA-Z0-9]?([\\\\][torbna0\"\'\\\\])?|[^a-zA-Z0-9\\\\])*\"");
 
 		if (value_part != "")
 		{
@@ -56,7 +56,7 @@ public:
 				}
 				else
 				{
-					list->append("InvalidLexene", value_part, line_no);
+					list->append("invalid_lexene", value_part, line_no);
 				}
 			}
 			else if (regex_match(value_part, sttring))			//String constant?
@@ -69,11 +69,11 @@ public:
 			}
 			else if (regex_match(value_part, digit))	//if digit
 			{
-				list->append("Int_const", value_part, line_no);
+				list->append("int_const", value_part, line_no);
 			}
 			else if (regex_match(value_part, floatrgx))		//if float
 			{
-				list->append("Float_const", value_part, line_no);
+				list->append("float_const", value_part, line_no);
 			}
 			else if (value_part == ".")					//if dot
 			{
@@ -81,7 +81,7 @@ public:
 			}
 			else
 			{
-				list->append("InvalidLexene", value_part, line_no);
+				list->append("invalid_lexene", value_part, line_no);
 			}	
 		}
 	}
@@ -113,6 +113,11 @@ public:
 	void printList()
 	{
 		list->print();
+	}
+
+	LinkedList* tokenPointer()
+	{
+		return list;
 	}
 };
 

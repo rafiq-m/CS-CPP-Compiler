@@ -29,12 +29,12 @@ class WordBreak
 			count++;
 		}
 		mySplit();		//breaks whole sentence into pieces
-		show();
+		//show();
 	}
 
 	void mySplit() 
 	{
-		regex isdigit("[0-9]+");
+		regex isdigit("[+|-]?[0-9]+");
 		regex isAlphaDigit("[A-Za-z0-9_]+");
 		string temp = "";
 		for (int i = 0; i < count; i++)
@@ -139,12 +139,12 @@ class WordBreak
 				temp = "";
 				if (words[i] == '+' && words[i + 1] == '+')
 				{
-					token.generateToken("Inc/Dec", string(1, words[i]) + words[i + 1], lineNo);
+					token.generateToken("inc_dec", string(1, words[i]) + words[i + 1], lineNo);
 					i++;
 				}
 				else if (words[i] == '-' && words[i + 1] == '-')
 				{
-					token.generateToken("Inc/Dec", string(1, words[i]) + words[i + 1], lineNo);
+					token.generateToken("inc_dec", string(1, words[i]) + words[i + 1], lineNo);
 					i++;
 				}
 				else if(words[i] == '+' || words[i] == '-')
@@ -161,13 +161,13 @@ class WordBreak
 					}
 					else
 					{
-						token.generateToken("PM", temp, lineNo);
+						token.generateToken("pm", temp, lineNo);
 						temp = "";
 					}
 				}
 				else 
 				{
-					token.generateToken("MDM", string(1,words[i]), lineNo);
+					token.generateToken("mdm", string(1,words[i]), lineNo);
 				}
 			}
 
@@ -178,25 +178,25 @@ class WordBreak
 				{
 					token.generateToken(temp, lineNo);
 					temp = "";
-					token.generateToken("ROP", string(1, words[i]) + words[i + 1], lineNo);
+					token.generateToken("rop", string(1, words[i]) + words[i + 1], lineNo);
 					i++;
 				}
 				else if(words[i] == '!')
 				{
 					token.generateToken(temp, lineNo);
-					token.generateToken("Not", string(1,words[i]), lineNo);
+					token.generateToken(string(1, words[i]), "_", lineNo);
 					temp = "";
 				}
 				else if (words[i] == '=')
 				{
 					token.generateToken(temp, lineNo);
-					token.generateToken("EqlTo", string(1, words[i]), lineNo);
+					token.generateToken(string(1, words[i]), "_", lineNo);
 					temp = "";
 				}
 				else if (words[i] == '>' || words[i] == '<') 
 				{
 					token.generateToken(temp, lineNo);
-					token.generateToken("ROP", string(1, words[i]), lineNo);
+					token.generateToken("rop", string(1, words[i]), lineNo);
 					temp = "";
 				}
 			}
@@ -222,7 +222,7 @@ class WordBreak
 				{
 					token.generateToken(temp, lineNo);
 					temp = "";
-					token.generateToken("InvalidLexene", string(1, words[i]), lineNo);
+					token.generateToken("invalid_lexene", string(1, words[i]), lineNo);
 				}
 			}
 
@@ -267,53 +267,48 @@ class WordBreak
 				}
 			}
 
-			if (words[i] == '\'')
+			if (words[i] == '\'') 
 			{
 				token.generateToken(temp, lineNo);
 				temp = "";
 				not_any = true;
 				temp += words[i];
 				i++;
-				if (words[i] == '\n')
+				if (words[i] == '\'') 
 				{
+					temp += words[i];
 					token.generateToken(temp, lineNo);
 					temp = "";
-					lineNo++;
 				}
-				else if (words[i] == '\'')
+				else if(words[i] =='\\')
 				{
-					i--;
+					temp += words[i];
+					i++;
+					temp += words[i];
+					i++;
+					temp += words[i];
+					token.generateToken(temp, lineNo);
+					temp = "";
 				}
-				else
+				else if (words[i] != '\n' && count > i -2)
 				{
-					if (words[i] == '\\')
+					temp += words[i];	// 
+					i++;
+					if (words[i] != '\n')
 					{
+						token.generateToken(temp, lineNo);
+						temp = "";
 						temp += words[i];
-						i++;
-						temp += words[i];
-						i++;
-						if (words[i] == '\'') 
-							temp += words[i];
-						else if (words[i] == '\n')
-						{
-							token.generateToken(temp, lineNo);
-							temp = "";
-							lineNo++;
-						}
-					}
+					}//'
 					else
 					{
-						temp += words[i];
-						i++;
-						if (words[i] == '\'')
-							temp += words[i];
-						else
-							i--;
+						token.generateToken(temp, lineNo);
+						temp = "";
+						lineNo++;
 					}
 				}
-				token.generateToken(temp, lineNo);
-				temp = "";
 			}
+
 
 			if(!not_any)
 			{
@@ -324,9 +319,14 @@ class WordBreak
 		token.generateToken(temp, lineNo);
 	}
 
-	void show()
+	/*void show()
 	{
 		token.printList();
+	}*/
+
+	LinkedList* getTokens() 
+	{
+		return token.tokenPointer();
 	}
 };
 

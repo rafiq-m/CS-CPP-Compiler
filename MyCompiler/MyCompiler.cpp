@@ -3,19 +3,16 @@
 #include<fstream>
 #include "WordBreak.h"
 #include <string>
+#include "Token.h"
+#include "LinkedList.h"
 
 using namespace std;
 
 int main()
 {
-	//starts here
-	/*regex sttring("\"([a-zA-Z0-9]([\\\\][torbn]){0,1}|[^a-zA-Z0-9\\\\])*\"");
-	string s = "\"s\\ba9132ja\\ndlk\"";
-	cout << s << endl;
-	if (regex_match(s, sttring)) 
-	{
-		cout << "Hello" << endl;
-	}*/
 	WordBreak *word = new WordBreak("input.txt");
+	LinkedList *tokens = word->getTokens();
+	tokens->append("$", "_", -1); 
+	tokens->print();
 }
 

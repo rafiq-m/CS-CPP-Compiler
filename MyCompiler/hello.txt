@@ -1,8 +1,4 @@
-78.78.2b4vv.vv24c.45s2n.435.343-56*abc
-55.abc6.55b.89.a99c
-99b99.99abc.abc99c.55
-
-/*void interface A_B_C:::abc.45abc
+void interface A_B_C:::abc.45abc
 if_else(a<<<<b!=54+++===!!!<>a54bv
 char ch="vsdfds\\a+== vdsds-=ds\t\"fsdsas\""
 string s = "Rafiq\a\t\'\"\0-+= \\\".q\a"
