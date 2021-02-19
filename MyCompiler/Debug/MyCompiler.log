@@ -3,6 +3,6 @@ C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\Token.h(29,20): warning C4129:  '.'
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(44,20): warning C4129:  '/': unrecognized character escape sequence
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(51,26): warning C4129:  '*': unrecognized character escape sequence
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(51,50): warning C4129:  '/': unrecognized character escape sequence
-C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(64,20): warning C4129:  '/': unrecognized character escape sequence
-C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(64,44): warning C4129:  '/': unrecognized character escape sequence
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(66,20): warning C4129:  '/': unrecognized character escape sequence
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(66,44): warning C4129:  '/': unrecognized character escape sequence
   MyCompiler.vcxproj -> C:\Users\Rafiq\Desktop\MyCompiler\Debug\MyCompiler.exe

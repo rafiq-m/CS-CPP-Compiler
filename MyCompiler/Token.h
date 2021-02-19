@@ -26,7 +26,7 @@ public:
 		regex isalphabet("[_A-Za-z]");
 		regex floatrgx("[+-]{0,1}[0-9]*[\\.][0-9]+");
 		regex charConst("\\'([\\\\][torbn])\\'");
-		regex char1Const("\\'\.\\'");
+		regex char1Const("\\'\.?\\'");
 		regex digit("[+-]{0,1}[0-9]+");
 		regex isID("([_a-zA-Z][_A-Za-z0-9]*[A-Za-z0-9])|[A-Za-z]");
 		regex sttring("\"([a-zA-Z0-9]?([\\\\][torbna0\"\'\\\\])?|[^a-zA-Z0-9\\\\])*\"");

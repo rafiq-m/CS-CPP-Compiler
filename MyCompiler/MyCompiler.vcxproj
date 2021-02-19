@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SyntaxAnalyzer.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="WordBreak.h" />
   </ItemGroup>

@@ -8,11 +8,11 @@
 
 using namespace std;
 
-int main()
-{
-	WordBreak *word = new WordBreak("input.txt");
-	LinkedList *tokens = word->getTokens();
-	tokens->append("$", "_", -1); 
-	tokens->print();
-}
-
+	int main()
+	{
+		WordBreak *word = new WordBreak("input.txt");
+		LinkedList *tokens = word->getTokens();
+		tokens->append("$", "_", -1);
+		LinkedList* mytokens = tokens;
+		mytokens->print();
+	}

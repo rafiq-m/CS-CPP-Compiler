@@ -50,11 +50,13 @@ class WordBreak
 				{
 					if (words[i + 1] == '\*' && words[i + 2] == '\/')
 					{
+						not_any = false;
 						break;
 					}
 					if (words[i] == '\n')
 					{
 						lineNo++;
+						
 					}
 					i++;
 				}
@@ -296,9 +298,9 @@ class WordBreak
 					i++;
 					if (words[i] != '\n')
 					{
+						temp += words[i];
 						token.generateToken(temp, lineNo);
 						temp = "";
-						temp += words[i];
 					}//'
 					else
 					{
@@ -307,8 +309,20 @@ class WordBreak
 						lineNo++;
 					}
 				}
+				else if (words[i] == '\n') 
+				{
+					token.generateToken(temp, lineNo);
+					temp = "";
+					lineNo++;
+				}
 			}
-
+			if (words[i] == ':')
+			{
+				not_any = true;
+				token.generateToken(temp, lineNo);
+				temp = "";
+				token.generateToken(string(1, words[i]), lineNo);
+			}
 
 			if(!not_any)
 			{

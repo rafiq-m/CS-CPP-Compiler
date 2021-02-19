@@ -37,7 +37,22 @@ public:
 		}
 	}
 
-
+	string getClassPart()
+	{
+		return root->class_part;
+	}
+	string getValuePart()
+	{
+		return root->value_part;
+	}
+	int getLineno()
+	{
+		return root->line_no;
+	}
+	void next()
+	{
+		root = root->next;
+	}
 	void print()
 	{
 		Node* troot = root;
