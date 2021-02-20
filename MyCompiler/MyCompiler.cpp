@@ -5,6 +5,7 @@
 #include <string>
 #include "Token.h"
 #include "LinkedList.h"
+#include "SyntaxAnalyzer.h"
 
 using namespace std;
 
@@ -15,4 +16,5 @@ using namespace std;
 		tokens->append("$", "_", -1);
 		LinkedList* mytokens = tokens;
 		mytokens->print();
+		SyntaxAnalyzer* syntax_analyzer = new SyntaxAnalyzer(mytokens);
 	}
