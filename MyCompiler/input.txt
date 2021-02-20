@@ -1,5 +1,7 @@
-void interface A_B_C:::abc.45abc
+a[1].a  = a[2].fn();}
+
+/*void interface A_B_C:::abc.45abc
 if_else(a<<<<b!=54+++===!!!<>a54bv
-/*char ch="vsdfds\\a+== vdsds-=ds\*\"fsdsas
+char ch="vsdfds\\a+== vdsds-=ds\*\"fsdsas
 String s=' '++'++'\n'abc'\\r'+'43-2'3
 return new class(((78.78.2b4vv.vv24c.45s2n.435.343-56*abc
