@@ -10,9 +10,9 @@ class Token
 {
 private:
 	LinkedList* list = new LinkedList();
-	string keyword[24] = { "if","else","for","while","void","return",
+	string keyword[25] = { "if","else","for","while","void","return",
 		"break","continue","true","false","NULL","class","extends","private",
-		"public","protected","this","static","new","abstract","final","try","catch","finally" };
+		"public","protected","this","static","new","abstract","final","try","catch","finally","namespace"};
 	string DT[6] = { "int","float","char","string","bool","var" };
 	
 public:
