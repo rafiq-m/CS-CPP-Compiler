@@ -19,7 +19,7 @@ public:
 };
 class LinkedList
 {
-private:
+public:
 	Node* root = nullptr;
 	Node* tail = nullptr;
 

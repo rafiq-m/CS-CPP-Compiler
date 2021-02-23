@@ -1,106 +1,16 @@
-
-namespace PracticeCompiler
-{
-
-
-    class student
-    {
-        public string name;
-        public int age;
-        static public string sname;
-        public student(string name, int age)
-        {
-            this.name = name;
-            this.age = age;
-        }
-        public student()
-        {
-            Console.WriteLine();
-        }
-        public int incr()
-        {
-            ++this.age;
-            return 5;
-        }
-        public student[] getData()
-        {
-            return new student[34];
-        }
-        public student add(student s)
-        {
-            return new student();
-        }
-
-    }
-    class Program extends student, id
-    {
-        static void Main()
-        {
-            Console.WriteLine("Hello world");
-            int[] a = { 2, 3, 4, 5, 2, 2};
-            student sa = new student();
-            student sa1 = new student();
-            int[] aasd = new int[2], b = { 2, 3, 4, 5 };
-            int aas = sa1.getData()[2].getData()[2].age;
-            int dasd = sa1.getData()[2].age++;
-            int ab = 0;
-            int i = 0;
-            for (student[] s2 = new student[2] { sa, sa1.add(sa) }; a[2] < i; i++)
-            {
-
-            }
-        }
-
-
-        static public int add()
-        {
-            return 4;
-        }
-    }
-}
-
-
-/*
-namespace rafiq{
+namespace id {
 class A {
-public static int i = 0;
-public static int[] hello(int a)
-{
-i++;
-int[] a = new int[2];
-return new int[2]{2,3};
-}
-static void main(string[] args){
-try{}
-catch(exception ex){
-try{} catch(ex ex) { 
-	try{ 
- 	 for (student[] s2 = new student[2] { sa, sa1.add(sa) }; a[2] < i; i++)
-                {
+void hello () {
 
-                }
+}
 
-	}
-	catch(ex ex){ }
-}
-}
-catch(ID ID){}
-finally{}
-}
+void hello(int a, int[] a){
+int[] a =new int[2];
+a.fn().a[2] = 2;
+
 }
 }
 
-/*
 
-student sa = new student();
-student sa1 = new student();
-student[] s = { new student(), sa.add(sa1) };
-int[] aasd = new int[2], b = { 2, 3, 4, 5 };
-int aas = sa1.getData()[2].getData()[2].age;
-int dasd = sa1.getData()[2].age++;
-int ab = 0;
-int[] a = new int[2];
-fn().a = 2;
-fn().a = 2;
-i++;
-++i;
+
+
