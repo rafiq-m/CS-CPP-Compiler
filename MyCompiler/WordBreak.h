@@ -152,7 +152,9 @@ class WordBreak
 				else if(words[i] == '+' || words[i] == '-')
 				{
 					temp += words[i];
-					if (regex_match(string(1,words[i+1]), isdigit)) 
+					if (regex_match(string(1,words[i+1]), isdigit) && (token.getprev() == "=" ||
+						token.getprev() == "," || token.getprev() == "["  || token.getprev() == "(" ||
+						token.getprev() == "{"))
 					{	
 						/*i++;
 						while (regex_match(string(1, words[i]), isdigit))

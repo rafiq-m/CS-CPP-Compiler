@@ -185,9 +185,13 @@ public:
 	}
 
 	bool OE() {
-		if (AE()) {
-			if (OE_()) {
-				return true;
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
+			if (AE()) {
+				if (OE_()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -209,9 +213,13 @@ public:
 	}
 	
 	bool AE() {
-		if (RE()) {
-			if (AE_()) {
-				return true;
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
+			if (RE()) {
+				if (AE_()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -234,9 +242,13 @@ public:
 	}
 
 	bool RE() {
-		if (PE()) {
-			if (RE_()) {
-				return true;
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
+			if (PE()) {
+				if (RE_()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -259,9 +271,13 @@ public:
 	}
 
 	bool PE() {
-		if (ME()) {
-			if (PE_()) {
-				return true;
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
+			if (ME()) {
+				if (PE_()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -284,9 +300,13 @@ public:
 	}
 	
 	bool ME() {
-		if (F()) {
-			if (ME_()) {
-				return true;
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
+			if (F()) {
+				if (ME_()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -309,8 +329,11 @@ public:
 	}
 	
 	bool F() {
-		if (constant()) {
-			return true;
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var") {
+			if (constant()) {
+				return true;
+			}
 		}
 		else if (t->getClassPart() == "(") {
 			t->next();
@@ -327,13 +350,15 @@ public:
 				return true;
 			}
 		}
-		else if (this_st()) {
+		else if (t->getClassPart() == "this" || t->getClassPart() == "ID") {
+		if (this_st()) {
 			if (t->getClassPart() == "ID") {
 				t->next();
 				if (XY()) {
 					return true;
 				}
 			}
+		}
 		}
 		else if (t->getClassPart() == "inc_dec") {
 			t->next();
@@ -1030,10 +1055,17 @@ public:
 		return false;
 	}
 	//MST ka issue
+	/*
+	First(<MST>) -> { if, while, for, try, this, inc_dec, ID, DT, return, ~ } 
+	Follow(<MST>) -> } 
+	*/
 	bool MST() {
-		if (SST()) {
-			if (MST()) {
-				return true;
+		if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" ||
+			t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "continue" || t->getClassPart() == "break") {
+			if (SST()) {
+				if (MST()) {
+					return true;
+				}
 			}
 		}
 		else if (t->getClassPart() == "}") {
@@ -1542,9 +1574,12 @@ public:
 	}
 
 	bool MST1() {
-		if (SST1()) {
-			if (MST1()) {
-				return true;
+		if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" ||
+			t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "return") {
+			if (SST1()) {
+				if (MST1()) {
+					return true;
+				}
 			}
 		}
 		else if (t->getClassPart() == "}") {
@@ -1708,11 +1743,13 @@ public:
 		}
 		return false;
 	}
-
 	bool CB_MST() {
-		if (CB()) {
-			if (CB_MST()) {
-				return true;
+		if (t->getClassPart() == "static" || t->getClassPart() == "public" || t->getClassPart() == "protected" || t->getClassPart() == "private" || 
+			t->getClassPart() == "DT" || t->getClassPart() == "void" || t->getClassPart() == "ID") {
+			if (CB()) {
+				if (CB_MST()) {
+					return true;
+				}
 			}
 		}
 		else if (t->getClassPart() == "}") {
@@ -1773,14 +1810,22 @@ public:
 				}
 			}
 		}
-		else if (access_modifiers()) {
-			if (static_choice()) {
-				if (CB1()) {
-					return true;
+		else if (t->getClassPart() == "private" || t->getClassPart() == "public" || t->getClassPart() == "protected") {
+			if (access_modifiers()) {
+				if (static_choice()) {
+					if (CB1()) {
+						return true;
+					}
 				}
 			}
 		}
-		else if (CB1()) {
+		else if (t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void") {
+			if (CB1()) {
+				return true;
+			}
+		}
+		else if (t->getClassPart() == "static" || t->getClassPart() == "public" || t->getClassPart() == "protected" || t->getClassPart() == "private"
+			|| t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void" || t->getClassPart() == "}") {
 			return true;
 		}
 		return false;
@@ -1975,9 +2020,11 @@ public:
 	}
 
 	bool class_rep() {
-		if (class_st()) {
-			if (class_rep()) {
-				return true;
+		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final" || t->getClassPart() == "class") {
+			if (class_st()) {
+				if (class_rep()) {
+					return true;
+				}
 			}
 		}
 		else if (t->getClassPart() == "}") {

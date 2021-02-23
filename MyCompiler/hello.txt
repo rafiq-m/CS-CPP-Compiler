@@ -15,3 +15,110 @@ ___a_c_v(((A_b_B_c!!!56&&&a--45.43
 char c="asaads\"asdsas"ASD+=45
 A'\\N'\n'+++='nn'6
 -34.56.3z42.a54.abc.45cvb//sdads=-"sds"42//
+
+*namespace PracticeCompiler
+{
+
+    class student
+    {
+
+	int a = sa1.getData()[2].getData()[2].age;
+        static public string name;
+        public static  int age;
+        static public string sname;
+        public student(string name, int age)
+        {
+            this.name = name;
+            this.age = age;
+        }
+        public student()
+        {
+            Console.WriteLine();
+        }
+        public int incr()
+        {
+            ++this.age;
+            return new student[sa1.getData()[+2].getData()[2].age] {2, sa.add(s1)};
+        }
+        public student[] getData()
+        {
+            return new student[2];
+        }
+        public student add(student s)
+        {
+            return new student();
+        }
+
+    }
+    class Program extends student, id
+    {
+        static void Main()
+        {
+            Console.WriteLine("Hello world");
+            int[] a = { 2, 3, 4, 5, 2, 2};
+            student sa = new student();
+            student sa1 = new student();
+            int[] aasd = new int[2], b = { 2, 3, 4, 5};
+            int aas = sa1.getData()[2].getData()[2].age;
+            int dasd = sa1.getData()[2].age++;
+            int ab = 0;
+            int i = 0;
+            for (;;)
+            {
+
+            }
+        }
+
+
+        static public int add()
+        {
+            return 4;
+        }
+    }
+}
+
+
+/*
+namespace rafiq{
+class A {
+public static int i = 0;
+public static int[] hello(int a)
+{
+i++;
+int[] a = new int[2];
+return new int[2]{2,3};
+}
+static void main(string[] args){
+try{}
+catch(exception ex){
+try{} catch(ex ex) { 
+	try{ 
+ 	 for (student[] s2 = new student[2] { sa, sa1.add(sa) }; a[2] < i; i++)
+                {
+
+                }
+
+	}
+	catch(ex ex){ }
+}
+}
+catch(ID ID){}
+finally{}
+}
+}
+}
+
+/*
+
+student sa = new student();
+student sa1 = new student();
+student[] s = { new student(), sa.add(sa1) };
+int[] aasd = new int[2], b = { 2, 3, 4, 5 };
+int aas = sa1.getData()[2].getData()[2].age;
+int dasd = sa1.getData()[2].age++;
+int ab = 0;
+int[] a = new int[2];
+fn().a = 2;
+fn().a = 2;
+i++;
+++i;

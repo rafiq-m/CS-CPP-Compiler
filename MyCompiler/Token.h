@@ -21,6 +21,9 @@ public:
 		if (value_part != "")
 			list->append(class_part, value_part, line_no);
 	}
+	string getprev() {
+		return list->tail->class_part;
+	}
 	void generateToken(string value_part, int line_no)
 	{
 		regex isalphabet("[_A-Za-z]");
