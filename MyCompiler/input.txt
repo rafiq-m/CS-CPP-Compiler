@@ -1,16 +1,14 @@
-namespace id {
-class A {
-void hello () {
+namespace id{
+class A
+{
+int main(string[] arr){for(console.write().a++;;){  }   } 
+
+
+class b{  static public int[] hello(int[] a){ int[] a = new int[2];this.i++;this.i.fn().a[2] = 2 + 3 / 2;for(student[] s = new student[2]{2,3};true == true;){ }}}
 
 }
 
-void hello(int a, int[] a){
-int[] a =new int[2];
-a.fn().a[2] = 2;
-
+class d{int main(){i++;}}
 }
-}
-
-
 
 

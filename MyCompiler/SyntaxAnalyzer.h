@@ -4,28 +4,31 @@ class SyntaxAnalyzer
 {
 	LinkedList* t;
 public:
-	SyntaxAnalyzer(LinkedList* tokens)
-	{
+	SyntaxAnalyzer(LinkedList* tokens) {
 		this->t = tokens;
 		checkSyntactically();
 	}
 	void checkSyntactically() {
-		if (S()) {
-			if(t->getClassPart() == "$")
+		if (S())
+		{
+			if (t->getClassPart() == "$")
 				cout << "Okay All correct !" << endl;
+			else
+				cout << "Error at Line No: " << t->getLineno() << "   " << t->getClassPart() << endl;
 		}
 		else
-		{
 			cout << "Error at Line No: " << t->getLineno() << "   " << t->getClassPart() << endl;
-		}
 	}
 
 	bool practice() {
-		if (t->getClassPart() == "ID") {
+		if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (t->getClassPart() == "{") {
+			if (t->getClassPart() == "{")
+			{
 				t->next();
-				if (MST1()) {
+				if (MST1())
+				{
 					if (t->getClassPart() == "}")
 					{
 						t->next();
@@ -37,35 +40,45 @@ public:
 		return false;
 	}
 
-	bool dec(){
-		if (t->getClassPart() == "DT") {
+	bool dec() {
+		if (t->getClassPart() == "DT")
+		{
 			t->next();
-			if (dec_choice()) {
+			if (dec_choice())
+			{
 				return true;
 			}
 		}
 		return false;
 	}
 
-	bool dec_choice(){
-		if (t->getClassPart() == "[") {
+	bool dec_choice() {
+		if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (t->getClassPart() == "]") {
+			if (t->getClassPart() == "]")
+			{
 				t->next();
-				if (t->getClassPart() == "ID") {
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (init_arr()) {
-						if (list_arr()) {
+					if (init_arr())
+					{
+						if (list_arr())
+						{
 							return true;
 						}
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "ID") {
+		else if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (init()) {
-				if (list()) {
+			if (init())
+			{
+				if (list())
+				{
 					return true;
 				}
 			}
@@ -74,29 +87,37 @@ public:
 	}
 
 	bool init() {
-		if (t->getClassPart() == "=") {
+		if (t->getClassPart() == "=")
+		{
 			t->next();
-			if (OE()) {
+			if (OE())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ";" || t->getClassPart() == ",") {
+		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool list() {
-		if (t->getClassPart() == ";") {
+		if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
-		else if (t->getClassPart() == ",") {
+		else if (t->getClassPart() == ",")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (init()) {
-					if (list()) {
+				if (init())
+				{
+					if (list())
+					{
 						return true;
 					}
 				}
@@ -106,29 +127,37 @@ public:
 	}
 
 	bool init_arr() {
-		if (t->getClassPart() == "=") {
+		if (t->getClassPart() == "=")
+		{
 			t->next();
-			if (init_arr_choice()) {
+			if (init_arr_choice())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ";" || t->getClassPart() == ",") {
+		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool list_arr() {
-		if (t->getClassPart() == ";") {
+		if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
-		else if (t->getClassPart() == ",") {
+		else if (t->getClassPart() == ",")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (init_arr()) {
-					if (list_arr()) {
+				if (init_arr())
+				{
+					if (list_arr())
+					{
 						return true;
 					}
 				}
@@ -138,16 +167,22 @@ public:
 	}
 
 	bool init_arr_choice() {
-		if (t->getClassPart() == "new") {
+		if (t->getClassPart() == "new")
+		{
 			t->next();
-			if (t->getClassPart() == "DT") {
+			if (t->getClassPart() == "DT")
+			{
 				t->next();
-				if (t->getClassPart() == "[") {
+				if (t->getClassPart() == "[")
+				{
 					t->next();
-					if (OE()) {
-						if (t->getClassPart() == "]") {
+					if (OE())
+					{
+						if (t->getClassPart() == "]")
+						{
 							t->next();
-							if (return_choice()) {
+							if (return_choice())
+							{
 								return true;
 							}
 						}
@@ -155,30 +190,42 @@ public:
 				}
 			}
 		}
-		else if (t->getClassPart() == "{") {
+		else if (t->getClassPart() == "{")
+		{
 			t->next();
-			if (PL()) {
-				if (t->getClassPart() == "}") {
+			if (PL())
+			{
+				if (t->getClassPart() == "}")
+				{
 					t->next();
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == ";" || t->getClassPart() == ",") {
+		else if (t->getClassPart() == "ID")
+		{
+			t->next();
+			return true;
+		}
+		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool this_st() {
-		if (t->getClassPart() == "this") {
+		if (t->getClassPart() == "this")
+		{
 			t->next();
-			if (t->getClassPart() == ".") {
+			if (t->getClassPart() == ".")
+			{
 				t->next();
 				return true;
 			}
 		}
-		else if(t->getClassPart() == "ID"){
+		else if (t->getClassPart() == "ID")
+		{
 			return true;
 		}
 		return false;
@@ -186,10 +233,13 @@ public:
 
 	bool OE() {
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
-			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
-			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
-			if (AE()) {
-				if (OE_()) {
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
+		{
+			if (AE())
+			{
+				if (OE_())
+				{
 					return true;
 				}
 			}
@@ -198,26 +248,33 @@ public:
 	}
 
 	bool OE_() {
-		if (t->getClassPart() == "||") {
+		if (t->getClassPart() == "||")
+		{
 			t->next();
-			if (AE()) {
-				if (OE_()) {
+			if (AE())
+			{
+				if (OE_())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}") {
+		else if (t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	bool AE() {
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
-			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
-			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
-			if (RE()) {
-				if (AE_()) {
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
+		{
+			if (RE())
+			{
+				if (AE_())
+				{
 					return true;
 				}
 			}
@@ -226,16 +283,20 @@ public:
 	}
 
 	bool AE_() {
-		if (t->getClassPart() == "&&") {
+		if (t->getClassPart() == "&&")
+		{
 			t->next();
-			if (RE()) {
-				if (AE_()) {
+			if (RE())
+			{
+				if (AE_())
+				{
 					return true;
 				}
 			}
 		}
-		else if ( t->getClassPart() == "||" ||
-			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}") {
+		else if (t->getClassPart() == "||" ||
+			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
@@ -243,28 +304,35 @@ public:
 
 	bool RE() {
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
-			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
-			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
-			if (PE()) {
-				if (RE_()) {
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
+		{
+			if (PE())
+			{
+				if (RE_())
+				{
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	bool RE_() {
-		if (t->getClassPart() == "rop") {
+		if (t->getClassPart() == "rop")
+		{
 			t->next();
-			if (PE()) {
-				if (RE_()) {
+			if (PE())
+			{
+				if (RE_())
+				{
 					return true;
 				}
 			}
 		}
-		else if ( t->getClassPart() == "&&" || t->getClassPart() == "||" ||
-			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}") {
+		else if (t->getClassPart() == "&&" || t->getClassPart() == "||" ||
+			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
@@ -272,100 +340,129 @@ public:
 
 	bool PE() {
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
-			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
-			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
-			if (ME()) {
-				if (PE_()) {
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
+		{
+			if (ME())
+			{
+				if (PE_())
+				{
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	bool PE_() {
-		if (t->getClassPart() == "pm") {
+		if (t->getClassPart() == "pm")
+		{
 			t->next();
-			if (ME()) {
-				if (PE_()) {
+			if (ME())
+			{
+				if (PE_())
+				{
 					return true;
 				}
 			}
 		}
 		else if (t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||" ||
-			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}") {
+			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	bool ME() {
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
-			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var" || t->getClassPart() == "("
-			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec") {
-			if (F()) {
-				if (ME_()) {
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
+		{
+			if (F())
+			{
+				if (ME_())
+				{
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	bool ME_(){
-		if (t->getClassPart() == "mdm") {
+
+	bool ME_() {
+		if (t->getClassPart() == "mdm")
+		{
 			t->next();
-			if (F()) {
-				if (ME_()) {
+			if (F())
+			{
+				if (ME_())
+				{
 					return true;
 				}
 			}
 		}
 		else if (t->getClassPart() == "pm" || t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||" ||
-			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}") {
+			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	bool F() {
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
-			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var") {
-			if (constant()) {
+			|| t->getClassPart() == "true" || t->getClassPart() == "false")
+		{
+			if (constant())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "(") {
+		else if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == ")") {
+			if (OE())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "!") {
+		else if (t->getClassPart() == "!")
+		{
 			t->next();
-			if (F()) {
+			if (F())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "this" || t->getClassPart() == "ID") {
-		if (this_st()) {
-			if (t->getClassPart() == "ID") {
-				t->next();
-				if (XY()) {
-					return true;
+		else if (t->getClassPart() == "this" || t->getClassPart() == "ID")
+		{
+			if (this_st())
+			{
+				if (t->getClassPart() == "ID")
+				{
+					t->next();
+					if (XY())
+					{
+						return true;
+					}
 				}
 			}
 		}
-		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
-			if (this_st()) {
-				if (t->getClassPart() == "ID") {
+			if (this_st())
+			{
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (X()) {
+					if (X())
+					{
 						return true;
 					}
 				}
@@ -373,102 +470,129 @@ public:
 		}
 		return false;
 	}
-	
+
 	bool XY() {
-		if (t->getClassPart() == "[") {
+		if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == "]") {
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
 					t->next();
-					if (XY1()) {
+					if (XY1())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "(") {
+		else if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (PL()) {
-				if (t->getClassPart() == ")") {
+			if (PL())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
-					if (XY2()) {
+					if (XY2())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == ".") {
+		else if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (XY()) {
+				if (XY())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
 			return true;
 		}
 		else if (t->getClassPart() == "mdm" || t->getClassPart() == "pm" || t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||" ||
-			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}") {
+			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	bool XY2() {
-		if (t->getClassPart() == ".") {
+		if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (XY()) {
+				if (XY())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "[") {
+		else if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == "]") {
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
 					t->next();
-					if (XY1()) {
+					if (XY1())
+					{
 						return true;
 					}
 				}
 			}
 		}
 		else if (t->getClassPart() == "mdm" || t->getClassPart() == "pm" || t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||" ||
-			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}") {
+			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	bool XY1() {
-		if (t->getClassPart() == ".") {
+		if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (XY()) {
+				if (XY())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
 			return true;
 		}
 		else if (t->getClassPart() == "mdm" || t->getClassPart() == "pm" || t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||" ||
-			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}") {
+			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	bool constant() {
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
-			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "bool" || t->getClassPart() == "var") {
+			|| t->getClassPart() == "true" || t->getClassPart() == "false")
+		{
 			t->next();
 			return true;
 		}
@@ -476,81 +600,103 @@ public:
 	}
 
 	bool PL() {
-		if (OE()) {
-			if (PL1()) {
+		if (OE())
+		{
+			if (PL1())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ")" || t->getClassPart() == "}") {
+		else if (t->getClassPart() == ")" || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool PL1() {
-		if (t->getClassPart() == ",") {
+		if (t->getClassPart() == ",")
+		{
 			t->next();
-			if (OE()) {
-				if (PL1()) {
+			if (OE())
+			{
+				if (PL1())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == ")" || t->getClassPart() == "}") {
+		else if (t->getClassPart() == ")" || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
 	//some questions regarding first and follow set of X 
 	bool X() {
-		if (t->getClassPart() == "[") {
+		if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == "]") {
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
 					t->next();
-					if (X1()) {
+					if (X1())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "(") {
+		else if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (PL()) {
-				if (t->getClassPart() == ")") {
+			if (PL())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
-					if (X2()) {
+					if (X2())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == ".") {
+		else if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (X()) {
+				if (X())
+				{
 					return true;
 				}
 			}
 		}
 		//Follow Of X // kuch masley hain isme miss se discuss karna he
 		else if (t->getClassPart() == ";" || t->getClassPart() == "pm" || t->getClassPart() == "mdm" || t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||"
-			|| t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == "," || t->getClassPart() == "}" || t->getClassPart() == "if" 
+			|| t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == "," || t->getClassPart() == "}" || t->getClassPart() == "if"
 			|| t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" || t->getClassPart() == "inc_dec"
 			|| t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return"
-			|| t->getClassPart() == "=") {
+			|| t->getClassPart() == "=")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool X1() {
-		if (t->getClassPart() == ".") {
+		if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (X()) {
+				if (X())
+				{
 					return true;
 				}
 			}
@@ -559,32 +705,42 @@ public:
 			|| t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == "," || t->getClassPart() == "}" || t->getClassPart() == "if"
 			|| t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" || t->getClassPart() == "inc_dec"
 			|| t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return"
-			|| t->getClassPart() == "=") {
+			|| t->getClassPart() == "=")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool X2() {
-		if (t->getClassPart() == ".") {
+		if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (X()) {
+				if (X())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "[") {
+		else if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == "]") {
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
 					t->next();
-					if (t->getClassPart() == ".") {
+					if (t->getClassPart() == ".")
+					{
 						t->next();
-						if (t->getClassPart() == "ID") {
+						if (t->getClassPart() == "ID")
+						{
 							t->next();
-							if (X()) {
+							if (X())
+							{
 								return true;
 							}
 						}
@@ -596,9 +752,11 @@ public:
 	}
 
 	bool obj_dec() {
-		if (t->getClassPart() == "ID") {
+		if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (obj_dec_choice()) {
+			if (obj_dec_choice())
+			{
 				return true;
 			}
 		}
@@ -606,24 +764,32 @@ public:
 	}
 
 	bool obj_dec_choice() {
-		if (t->getClassPart() == "[") {
+		if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (t->getClassPart() == "]") {
+			if (t->getClassPart() == "]")
+			{
 				t->next();
-				if (t->getClassPart() == "ID") {
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (obj_init_arr()) {
-						if (obj_list_arr()) {
+					if (obj_init_arr())
+					{
+						if (obj_list_arr())
+						{
 							return true;
 						}
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "ID") {
+		else if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (obj_init()) {
-				if (obj_list()) {
+			if (obj_init())
+			{
+				if (obj_list())
+				{
 					return true;
 				}
 			}
@@ -632,27 +798,35 @@ public:
 	}
 
 	bool obj_init() {
-		if (t->getClassPart() == "=") {
+		if (t->getClassPart() == "=")
+		{
 			t->next();
-			if (obj_init_choice()) {
+			if (obj_init_choice())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ";" || t->getClassPart() == ",") {
+		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool obj_init_choice() {
-		if (t->getClassPart() == "new") {
+		if (t->getClassPart() == "new")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (t->getClassPart() == "(") {
+				if (t->getClassPart() == "(")
+				{
 					t->next();
-					if (PL()) {
-						if (t->getClassPart() == ")") {
+					if (PL())
+					{
+						if (t->getClassPart() == ")")
+						{
 							t->next();
 							return true;
 						}
@@ -660,26 +834,29 @@ public:
 				}
 			}
 		}
-		else if (OE()) {
-			return true;
-		}
-		else if (t->getClassPart() == "," || t->getClassPart() == ";") {
+		else if (OE())
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool obj_list() {
-		if (t->getClassPart() == ";") {
+		if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
-		else if (t->getClassPart() == ",") {
+		else if (t->getClassPart() == ",")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (obj_init()) {
-					if (obj_list()) {
+				if (obj_init())
+				{
+					if (obj_list())
+					{
 						return true;
 					}
 				}
@@ -689,29 +866,37 @@ public:
 	}
 
 	bool obj_init_arr() {
-		if (t->getClassPart() == "=") {
+		if (t->getClassPart() == "=")
+		{
 			t->next();
-			if (obj_init_arr_choice()) {
+			if (obj_init_arr_choice())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ";" || t->getClassPart() == ",") {
+		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool obj_list_arr() {
-		if (t->getClassPart() == ";") {
+		if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
-		else if (t->getClassPart() == ",") {
+		else if (t->getClassPart() == ",")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (obj_init_arr()) {
-					if (obj_list_arr()) {
+				if (obj_init_arr())
+				{
+					if (obj_list_arr())
+					{
 						return true;
 					}
 				}
@@ -721,16 +906,22 @@ public:
 	}
 
 	bool obj_init_arr_choice() {
-		if (t->getClassPart() == "new") {
+		if (t->getClassPart() == "new")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (t->getClassPart() == "[") {
+				if (t->getClassPart() == "[")
+				{
 					t->next();
-					if (OE()) {
-						if (t->getClassPart() == "]") {
+					if (OE())
+					{
+						if (t->getClassPart() == "]")
+						{
 							t->next();
-							if (return_obj_choice()) {
+							if (return_obj_choice())
+							{
 								return true;
 							}
 						}
@@ -738,32 +929,47 @@ public:
 				}
 			}
 		}
-		else if (t->getClassPart() == "{") {
+		else if (t->getClassPart() == "{")
+		{
 			t->next();
-			if (PL_dec()) {
-				if (t->getClassPart() == "}") {
+			if (PL_dec())
+			{
+				if (t->getClassPart() == "}")
+				{
 					t->next();
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == ";" || t->getClassPart() == ",") {
+		else if (t->getClassPart() == "ID")
+		{
+			t->next();
+			return true;
+		}
+		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool PL_dec() {
-		if (t->getClassPart() == "new") {
+		if (t->getClassPart() == "new")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (t->getClassPart() == "(") {
+				if (t->getClassPart() == "(")
+				{
 					t->next();
-					if (PL()) {
-						if (t->getClassPart() == ")") {
+					if (PL())
+					{
+						if (t->getClassPart() == ")")
+						{
 							t->next();
-							if (PL1_dec()) {
+							if (PL1_dec())
+							{
 								return true;
 							}
 						}
@@ -771,8 +977,10 @@ public:
 				}
 			}
 		}
-		else if (OE()) {
-			if (PL1_dec()) {
+		else if (OE())
+		{
+			if (PL1_dec())
+			{
 				return true;
 			}
 		}
@@ -780,29 +988,38 @@ public:
 	}
 
 	bool PL1_dec() {
-		if (t->getClassPart() == ",") {
+		if (t->getClassPart() == ",")
+		{
 			t->next();
-			if (PL1_choice()) {
-				if (PL1_dec()) {
+			if (PL1_choice())
+			{
+				if (PL1_dec())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "}") {
+		else if (t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool PL1_choice() {
-		if (t->getClassPart() == "new") {
+		if (t->getClassPart() == "new")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (t->getClassPart() == "(") {
+				if (t->getClassPart() == "(")
+				{
 					t->next();
-					if (PL()) {
-						if (t->getClassPart() == ")") {
+					if (PL())
+					{
+						if (t->getClassPart() == ")")
+						{
 							t->next();
 							return true;
 						}
@@ -810,29 +1027,38 @@ public:
 				}
 			}
 		}
-		else if (OE()) {
+		else if (OE())
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool SST() {
-		if (if_else()) {
+		if (if_else())
+		{
 			return true;
 		}
-		else if (while_st()) {
+		else if (while_st())
+		{
 			return true;
 		}
-		else if (for_st()) {
+		else if (for_st())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
-			if (this_st()) {
-				if (t->getClassPart() == "ID") {
+			if (this_st())
+			{
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (X()) {
-						if (t->getClassPart() == ";") {
+					if (X())
+					{
+						if (t->getClassPart() == ";")
+						{
 							t->next();
 							return true;
 						}
@@ -840,48 +1066,62 @@ public:
 				}
 			}
 		}
-		else if (t->getClassPart() == "this") {
+		else if (t->getClassPart() == "this")
+		{
 			t->next();
-			if (t->getClassPart() == ".") {
+			if (t->getClassPart() == ".")
+			{
 				t->next();
-				if (t->getClassPart() == "ID") {
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (XY_SST()) {
+					if (XY_SST())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "ID") {
+		else if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (ZZZ()) {
+			if (ZZZ())
+			{
 				return true;
 			}
 		}
-		else if (try_st()) {
+		else if (try_st())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == "DT") {
+		else if (t->getClassPart() == "DT")
+		{
 			t->next();
-			if (dec_choice()) {
+			if (dec_choice())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "continue") {
+		else if (t->getClassPart() == "continue")
+		{
 			t->next();
-			if (t->getClassPart() == ";") {
+			if (t->getClassPart() == ";")
+			{
 				t->next();
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "break") {
+		else if (t->getClassPart() == "break")
+		{
 			t->next();
-			if (t->getClassPart() == ";") {
+			if (t->getClassPart() == ";")
+			{
 				t->next();
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ";") {
+		else if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
@@ -889,29 +1129,39 @@ public:
 	}
 
 	bool ZZZ() {
-		if (t->getClassPart() == "ID") {
+		if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (obj_init()) {
-				if (obj_list()) {
+			if (obj_init())
+			{
+				if (obj_list())
+				{
 					return true;
 				}
 			}
-		}		
-		else if (t->getClassPart() == "[") {
+		}
+		else if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (XY_dec()) {
+			if (XY_dec())
+			{
 				return true;
 			}
 		}
-		else if (XY1_SST()) {
+		else if (XY1_SST())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == "(") {
+		else if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (PL()) {
-				if (t->getClassPart() == ")") {
+			if (PL())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
-					if (XY2_SST()) {
+					if (XY2_SST())
+					{
 						return true;
 					}
 				}
@@ -921,20 +1171,27 @@ public:
 	}
 
 	bool XY_dec() {
-		if (OE()) {
-			if (t->getClassPart() == "]") {
+		if (OE())
+		{
+			if (t->getClassPart() == "]")
+			{
 				t->next();
-				if (XY1_SST()) {
+				if (XY1_SST())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "]") {
+		else if (t->getClassPart() == "]")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (obj_init_arr()) {
-					if (obj_list_arr()) {
+				if (obj_init_arr())
+				{
+					if (obj_list_arr())
+					{
 						return true;
 					}
 				}
@@ -944,54 +1201,71 @@ public:
 	}
 
 	bool XY_SST() {
-		if (t->getClassPart() == "(") {
+		if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (PL()) {
-				if (t->getClassPart() == ")") {
+			if (PL())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
-					if (XY2_SST()) {
+					if (XY2_SST())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == ".") {
+		else if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (XY_SST()) {
+				if (XY_SST())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
-			if (t->getClassPart() == ";") {
+			if (t->getClassPart() == ";")
+			{
 				t->next();
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "=") {
+		else if (t->getClassPart() == "=")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == ";") {
+			if (OE())
+			{
+				if (t->getClassPart() == ";")
+				{
 					t->next();
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "[") {
+		else if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == "]") {
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
 					t->next();
-					if (XY1_SST()) {
+					if (XY1_SST())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == ";") {
+		else if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
@@ -999,26 +1273,34 @@ public:
 	}
 
 	bool XY1_SST() {
-		if (t->getClassPart() == ".") {
+		if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (XY_SST()) {
+				if (XY_SST())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
-			if (t->getClassPart() == ";") {
+			if (t->getClassPart() == ";")
+			{
 				t->next();
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "=") {
+		else if (t->getClassPart() == "=")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == ";") {
+			if (OE())
+			{
+				if (t->getClassPart() == ";")
+				{
 					t->next();
 					return true;
 				}
@@ -1028,68 +1310,86 @@ public:
 	}
 
 	bool XY2_SST() {
-		if (t->getClassPart() == ".") {
+		if (t->getClassPart() == ".")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (XY_SST()) {
+				if (XY_SST())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "[") {
+		else if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == "]") {
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
 					t->next();
-					if (XY1_SST()) {
+					if (XY1_SST())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == ";") {
+		else if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
 		return false;
 	}
-	//MST ka issue
-	/*
-	First(<MST>) -> { if, while, for, try, this, inc_dec, ID, DT, return, ~ } 
-	Follow(<MST>) -> } 
-	*/
+
 	bool MST() {
 		if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" ||
-			t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "continue" || t->getClassPart() == "break") {
-			if (SST()) {
-				if (MST()) {
+			t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "continue" || t->getClassPart() == "break")
+		{
+			if (SST())
+			{
+				if (MST())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "}") {
+		else if (t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	bool for_st() {
-		if (t->getClassPart() == "for") {
+		if (t->getClassPart() == "for")
+		{
 			t->next();
-			if (t->getClassPart() == "(") {
+			if (t->getClassPart() == "(")
+			{
 				t->next();
-				if (c1()) {
-					if (c2()) {
-						if (t->getClassPart() == ";") {
+				if (c1())
+				{
+					if (c2())
+					{
+						if (t->getClassPart() == ";")
+						{
 							t->next();
-							if (c3()) {
-								if (t->getClassPart() == ")") {
+							if (c3())
+							{
+								if (t->getClassPart() == ")")
+								{
 									t->next();
-									if (t->getClassPart() == "{") {
+									if (t->getClassPart() == "{")
+									{
 										t->next();
-										if (MST()) {
-											if (t->getClassPart() == "}") {
+										if (MST())
+										{
+											if (t->getClassPart() == "}")
+											{
 												t->next();
 												return true;
 											}
@@ -1106,13 +1406,18 @@ public:
 	}
 
 	bool c1() {
-		if (t->getClassPart() == "inc_dec") {
+		if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
-			if (this_st()) {
-				if (t->getClassPart() == "ID") {
+			if (this_st())
+			{
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (X()) {
-						if (t->getClassPart() == ";") {
+					if (X())
+					{
+						if (t->getClassPart() == ";")
+						{
 							t->next();
 							return true;
 						}
@@ -1120,64 +1425,280 @@ public:
 				}
 			}
 		}
-		else if (t->getClassPart() == "DT") {
+		else if (t->getClassPart() == "DT")
+		{
 			t->next();
-			if (dec_choice()) {
+			if (dec_choice())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "this") {
+		else if (t->getClassPart() == "this")
+		{
 			t->next();
-			if (t->getClassPart() == ".") {
+			if (t->getClassPart() == ".")
+			{
 				t->next();
-				if (t->getClassPart() == "ID") {
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (X()) {
-						if (c1_choice2()) {
+					if (X())
+					{
+						if (c1_choice2())
+						{
 							return true;
 						}
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "ID") {
+		else if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (ZZZ()) {
+			if (for_ZZZ())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ";") {
+		else if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
 		return false;
 	}
 
-	bool c1_choice() {
-		if (obj_dec_choice()) {
+
+	bool for_ZZZ() {
+		if (t->getClassPart() == "ID")
+		{
+			t->next();
+			if (obj_init())
+			{
+				if (obj_list())
+				{
+					return true;
+				}
+			}
+		}
+		else if (t->getClassPart() == "[")
+		{
+			t->next();
+			if (for_XY_dec())
+			{
+				return true;
+			}
+		}
+		else if (for_XY1_SST())
+		{
 			return true;
 		}
-		else if (X()) {
-			if (c1_choice2()) {
+		else if (t->getClassPart() == "(")
+		{
+			t->next();
+			if (PL())
+			{
+				if (t->getClassPart() == ")")
+				{
+					t->next();
+					if (for_XY2_SST())
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	bool for_XY_dec() {
+		if (OE())
+		{
+			if (t->getClassPart() == "]")
+			{
+				t->next();
+				if (for_XY1_SST())
+				{
+					return true;
+				}
+			}
+		}
+		else if (t->getClassPart() == "]")
+		{
+			t->next();
+			if (t->getClassPart() == "ID")
+			{
+				t->next();
+				if (obj_init_arr())
+				{
+					if (obj_list_arr())
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	bool for_XY_SST() {
+		if (t->getClassPart() == "(")
+		{
+			t->next();
+			if (PL())
+			{
+				if (t->getClassPart() == ")")
+				{
+					t->next();
+					if (for_XY2_SST())
+					{
+						return true;
+					}
+				}
+			}
+		}
+		else if (t->getClassPart() == ".")
+		{
+			t->next();
+			if (t->getClassPart() == "ID")
+			{
+				t->next();
+				if (for_XY_SST())
+				{
+					return true;
+				}
+			}
+		}
+		else if (t->getClassPart() == "inc_dec")
+		{
+			t->next();
+			if (t->getClassPart() == ";")
+			{
+				t->next();
 				return true;
+			}
+		}
+		else if (t->getClassPart() == "=")
+		{
+			t->next();
+			if (OE())
+			{
+				if (t->getClassPart() == ";")
+				{
+					t->next();
+					return true;
+				}
+			}
+		}
+		else if (t->getClassPart() == "[")
+		{
+			t->next();
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
+					t->next();
+					if (for_XY1_SST())
+					{
+						return true;
+					}
+				}
+			}
+		}
+		else if (t->getClassPart() == ";")
+		{
+			t->next();
+			return true;
+		}
+		return false;
+	}
+
+	bool for_XY1_SST() {
+		if (t->getClassPart() == ".")
+		{
+			t->next();
+			if (t->getClassPart() == "ID")
+			{
+				t->next();
+				if (for_XY_SST())
+				{
+					return true;
+				}
+			}
+		}
+		else if (t->getClassPart() == "inc_dec")
+		{
+			t->next();
+			if (t->getClassPart() == ";")
+			{
+				t->next();
+				return true;
+			}
+		}
+		else if (t->getClassPart() == "=")
+		{
+			t->next();
+			if (OE())
+			{
+				if (t->getClassPart() == ";")
+				{
+					t->next();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	bool for_XY2_SST() {
+		if (t->getClassPart() == ".")
+		{
+			t->next();
+			if (t->getClassPart() == "ID")
+			{
+				t->next();
+				if (for_XY_SST())
+				{
+					return true;
+				}
+			}
+		}
+		else if (t->getClassPart() == "[")
+		{
+			t->next();
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
+					t->next();
+					if (for_XY1_SST())
+					{
+						return true;
+					}
+				}
 			}
 		}
 		return false;
 	}
 
 	bool c1_choice2() {
-		if (t->getClassPart() == "=") {
+		if (t->getClassPart() == "=")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == ";") {
+			if (OE())
+			{
+				if (t->getClassPart() == ";")
+				{
 					t->next();
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
-			if (t->getClassPart() == ";") {
+			if (t->getClassPart() == ";")
+			{
 				t->next();
 				return true;
 			}
@@ -1186,45 +1707,60 @@ public:
 	}
 
 	bool c2() {
-		if (OE()) {
+		if (OE())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == ";") {
+		else if (t->getClassPart() == ";")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool c3() {
-		if (this_st()) {
-			if (t->getClassPart() == "ID") {
+		if (this_st())
+		{
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (X()) {
-					if (c3_choice()) {
+				if (X())
+				{
+					if (c3_choice())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
-			if (this_st()) {
-				if (t->getClassPart() == "ID") {
+			if (this_st())
+			{
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (X()) {
+					if (X())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "new") {
+		else if (t->getClassPart() == "new")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (t->getClassPart() == "(") {
+				if (t->getClassPart() == "(")
+				{
 					t->next();
-					if (PL()) {
-						if (t->getClassPart() == ")") {
+					if (PL())
+					{
+						if (t->getClassPart() == ")")
+						{
 							t->next();
 							return true;
 						}
@@ -1232,20 +1768,24 @@ public:
 				}
 			}
 		}
-		else if (t->getClassPart() == ")") {
+		else if (t->getClassPart() == ")")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool c3_choice() {
-		if (t->getClassPart() == "inc_dec") {
+		if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
 			return true;
 		}
-		else if (t->getClassPart() == "=") {
+		else if (t->getClassPart() == "=")
+		{
 			t->next();
-			if (OE()) {
+			if (OE())
+			{
 				return true;
 			}
 		}
@@ -1253,19 +1793,27 @@ public:
 	}
 
 	bool if_else() {
-		if (t->getClassPart() == "if") {
+		if (t->getClassPart() == "if")
+		{
 			t->next();
-			if (t->getClassPart() == "(") {
+			if (t->getClassPart() == "(")
+			{
 				t->next();
-				if (OE()) {
-					if (t->getClassPart() == ")") {
+				if (OE())
+				{
+					if (t->getClassPart() == ")")
+					{
 						t->next();
-						if (t->getClassPart() == "{") {
+						if (t->getClassPart() == "{")
+						{
 							t->next();
-							if (MST()) {
-								if (t->getClassPart() == "}") {
+							if (MST())
+							{
+								if (t->getClassPart() == "}")
+								{
 									t->next();
-									if (o_else()) {
+									if (o_else())
+									{
 										return true;
 									}
 								}
@@ -1279,12 +1827,16 @@ public:
 	}
 
 	bool o_else() {
-		if (t->getClassPart() == "else") {
+		if (t->getClassPart() == "else")
+		{
 			t->next();
-			if (t->getClassPart() == "{") {
+			if (t->getClassPart() == "{")
+			{
 				t->next();
-				if (MST()) {
-					if (t->getClassPart() == "}") {
+				if (MST())
+				{
+					if (t->getClassPart() == "}")
+					{
 						t->next();
 						return true;
 					}
@@ -1293,24 +1845,32 @@ public:
 		}
 		else if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try"
 			|| t->getClassPart() == "this" || t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT"
-			|| t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return" || t->getClassPart() == "}") {
+			|| t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return" || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool while_st() {
-		if (t->getClassPart() == "while") {
+		if (t->getClassPart() == "while")
+		{
 			t->next();
-			if (t->getClassPart() == "(") {
+			if (t->getClassPart() == "(")
+			{
 				t->next();
-				if (OE()) {
-					if (t->getClassPart() == ")") {
+				if (OE())
+				{
+					if (t->getClassPart() == ")")
+					{
 						t->next();
-						if (t->getClassPart() == "{") {
+						if (t->getClassPart() == "{")
+						{
 							t->next();
-							if (MST()) {
-								if (t->getClassPart() == "}") {
+							if (MST())
+							{
+								if (t->getClassPart() == "}")
+								{
 									t->next();
 									return true;
 								}
@@ -1324,15 +1884,21 @@ public:
 	}
 
 	bool try_st() {
-		if (t->getClassPart() == "try") {
+		if (t->getClassPart() == "try")
+		{
 			t->next();
-			if (t->getClassPart() == "{") {
+			if (t->getClassPart() == "{")
+			{
 				t->next();
-				if (MST()) {
-					if (t->getClassPart() == "}") {
+				if (MST())
+				{
+					if (t->getClassPart() == "}")
+					{
 						t->next();
-						if (catch_st()) {
-							if (finally_st()) {
+						if (catch_st())
+						{
+							if (finally_st())
+							{
 								return true;
 							}
 						}
@@ -1344,22 +1910,31 @@ public:
 	}
 
 	bool catch_st() {
-		if (t->getClassPart() == "catch") {
+		if (t->getClassPart() == "catch")
+		{
 			t->next();
-			if (t->getClassPart() == "(") {
+			if (t->getClassPart() == "(")
+			{
 				t->next();
-				if (t->getClassPart() == "ID") {
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (t->getClassPart() == "ID") {
+					if (t->getClassPart() == "ID")
+					{
 						t->next();
-						if (t->getClassPart() == ")") {
+						if (t->getClassPart() == ")")
+						{
 							t->next();
-							if (t->getClassPart() == "{") {
+							if (t->getClassPart() == "{")
+							{
 								t->next();
-								if (MST()) {
-									if (t->getClassPart() == "}") {
+								if (MST())
+								{
+									if (t->getClassPart() == "}")
+									{
 										t->next();
-										if (catch_st1()) {
+										if (catch_st1())
+										{
 											return true;
 										}
 									}
@@ -1374,27 +1949,34 @@ public:
 	}
 
 	bool catch_st1() {
-		if (catch_st()) {
-			if (catch_st1()) {
+		if (catch_st())
+		{
+			if (catch_st1())
+			{
 				return true;
 			}
 		}
 		else if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try"
 			|| t->getClassPart() == "this" || t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT"
 			|| t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return" || t->getClassPart() == "}"
-			|| t->getClassPart() == "finally") {
+			|| t->getClassPart() == "finally")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool finally_st() {
-		if (t->getClassPart() == "finally") {
+		if (t->getClassPart() == "finally")
+		{
 			t->next();
-			if (t->getClassPart() == "{") {
+			if (t->getClassPart() == "{")
+			{
 				t->next();
-				if (MST()) {
-					if (t->getClassPart() == "}") {
+				if (MST())
+				{
+					if (t->getClassPart() == "}")
+					{
 						t->next();
 						return true;
 					}
@@ -1403,25 +1985,34 @@ public:
 		}
 		else if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try"
 			|| t->getClassPart() == "this" || t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT"
-			|| t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return" || t->getClassPart() == "}") {
+			|| t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return" || t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool func_dec() {
-		if (ret_type_choice()) {
-			if (t->getClassPart() == "ID") {
+		if (ret_type_choice())
+		{
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (t->getClassPart() == "(") {
+				if (t->getClassPart() == "(")
+				{
 					t->next();
-					if (def()) {
-						if (t->getClassPart() == ")") {
+					if (def())
+					{
+						if (t->getClassPart() == ")")
+						{
 							t->next();
-							if (t->getClassPart() == "{") {
+							if (t->getClassPart() == "{")
+							{
 								t->next();
-								if (MST1()) {
-									if (t->getClassPart() == "}") {
+								if (MST1())
+								{
+									if (t->getClassPart() == "}")
+									{
 										t->next();
 										return true;
 									}
@@ -1436,29 +2027,36 @@ public:
 	}
 
 	bool ret_type_choice() {
-		if (ret_type()) {
+		if (ret_type())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == "void") {
+		else if (t->getClassPart() == "void")
+		{
 			t->next();
 			return true;
 		}
-		else if (t->getClassPart() == "ID") {
+		else if (t->getClassPart() == "ID")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool ret_type() {
-		if (t->getClassPart() == "DT") {
+		if (t->getClassPart() == "DT")
+		{
 			t->next();
-			if (ret_choice()) {
+			if (ret_choice())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "ID") {
+		else if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (ret_choice()) {
+			if (ret_choice())
+			{
 				return true;
 			}
 		}
@@ -1466,69 +2064,89 @@ public:
 	}
 
 	bool ret_choice() {
-		if (t->getClassPart() == "[") {
+		if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (t->getClassPart() == "]") {
+			if (t->getClassPart() == "]")
+			{
 				t->next();
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ")" || t->getClassPart() == "," || t->getClassPart() == "ID") {
+		else if (t->getClassPart() == ")" || t->getClassPart() == "," || t->getClassPart() == "ID")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool def() {
-		if (ret_type()) {
-			if (t->getClassPart() == "ID") {
+		if (ret_type())
+		{
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (more_def()) {
+				if (more_def())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == ")") {
+		else if (t->getClassPart() == ")")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool more_def() {
-		if (t->getClassPart() == ",") {
+		if (t->getClassPart() == ",")
+		{
 			t->next();
-			if (ret_type()) {
-				if (t->getClassPart() == "ID") {
+			if (ret_type())
+			{
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (more_def()) {
+					if (more_def())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == ")") {
+		else if (t->getClassPart() == ")")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool SST1() {
-		if (if_else()) {
+		if (if_else())
+		{
 			return true;
 		}
-		else if (while_st()) {
+		else if (while_st())
+		{
 			return true;
 		}
-		else if (for_st()) {
+		else if (for_st())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == "inc_dec") {
+		else if (t->getClassPart() == "inc_dec")
+		{
 			t->next();
-			if (this_st()) {
-				if (t->getClassPart() == "ID") {
+			if (this_st())
+			{
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (X()) {
-						if (t->getClassPart() == ";") {
+					if (X())
+					{
+						if (t->getClassPart() == ";")
+						{
 							t->next();
 							return true;
 						}
@@ -1536,37 +2154,48 @@ public:
 				}
 			}
 		}
-		else if (t->getClassPart() == "this") {
+		else if (t->getClassPart() == "this")
+		{
 			t->next();
-			if (t->getClassPart() == ".") {
+			if (t->getClassPart() == ".")
+			{
 				t->next();
-				if (t->getClassPart() == "ID") {
+				if (t->getClassPart() == "ID")
+				{
 					t->next();
-					if (XY_SST()) {
+					if (XY_SST())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "ID") {
+		else if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (ZZZ()) {
+			if (ZZZ())
+			{
 				return true;
 			}
 		}
-		else if (try_st()) {
+		else if (try_st())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == "DT") {
+		else if (t->getClassPart() == "DT")
+		{
 			t->next();
-			if (dec_choice()) {
+			if (dec_choice())
+			{
 				return true;
 			}
 		}
-		else if (return_st()) {
+		else if (return_st())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == ";") {
+		else if (t->getClassPart() == ";")
+		{
 			t->next();
 			return true;
 		}
@@ -1575,31 +2204,42 @@ public:
 
 	bool MST1() {
 		if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" ||
-			t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "return") {
-			if (SST1()) {
-				if (MST1()) {
+			t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "return")
+		{
+			if (SST1())
+			{
+				if (MST1())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "}") {
+		else if (t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
-		
+
 	bool func() {
-		if (t->getClassPart() == "ID") {
+		if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (t->getClassPart() == "(") {
+			if (t->getClassPart() == "(")
+			{
 				t->next();
-				if (def()) {
-					if (t->getClassPart() == ")") {
+				if (def())
+				{
+					if (t->getClassPart() == ")")
+					{
 						t->next();
-						if (t->getClassPart() == "{") {
+						if (t->getClassPart() == "{")
+						{
 							t->next();
-							if (MST1()) {
-								if (t->getClassPart() == "}") {
+							if (MST1())
+							{
+								if (t->getClassPart() == "}")
+								{
 									t->next();
 									return true;
 								}
@@ -1613,10 +2253,13 @@ public:
 	}
 
 	bool return_st() {
-		if (t->getClassPart() == "return") {
+		if (t->getClassPart() == "return")
+		{
 			t->next();
-			if (either_return()) {
-				if (t->getClassPart() == ";") {
+			if (either_return())
+			{
+				if (t->getClassPart() == ";")
+				{
 					t->next();
 					return true;
 				}
@@ -1626,36 +2269,47 @@ public:
 	}
 
 	bool either_return() {
-		if (OE()) {
+		if (OE())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == "new") {
+		else if (t->getClassPart() == "new")
+		{
 			t->next();
-			if (return1()) {
+			if (return1())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == ";") {
+		else if (t->getClassPart() == ";")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool return1() {
-		if (t->getClassPart() == "ID") {
+		if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (return2()) {
+			if (return2())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "DT") {
+		else if (t->getClassPart() == "DT")
+		{
 			t->next();
-			if (t->getClassPart() == "[") {
+			if (t->getClassPart() == "[")
+			{
 				t->next();
-				if (OE()) {
-					if (t->getClassPart() == "]") {
+				if (OE())
+				{
+					if (t->getClassPart() == "]")
+					{
 						t->next();
-						if (return_choice()) {
+						if (return_choice())
+						{
 							return true;
 						}
 					}
@@ -1666,21 +2320,28 @@ public:
 	}
 
 	bool return2() {
-		if (t->getClassPart() == "(") {
+		if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (PL()) {
-				if (t->getClassPart() == ")") {
+			if (PL())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "[") {
+		else if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (OE()) {
-				if (t->getClassPart() == "]") {
+			if (OE())
+			{
+				if (t->getClassPart() == "]")
+				{
 					t->next();
-					if (return_obj_choice()) {
+					if (return_obj_choice())
+					{
 						return true;
 					}
 				}
@@ -1690,51 +2351,77 @@ public:
 	}
 
 	bool return_choice() {
-		if (t->getClassPart() == "{") {
+		if (t->getClassPart() == "{")
+		{
 			t->next();
-			if (PL()) {
-				if (t->getClassPart() == "}") {
+			if (PL())
+			{
+				if (t->getClassPart() == "}")
+				{
 					t->next();
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == ";" || t->getClassPart() == ",") {
+		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool return_obj_choice() {
-		if (t->getClassPart() == "{") {
+		if (t->getClassPart() == "{")
+		{
 			t->next();
-			if (PL_dec()) {
-				if (t->getClassPart() == "}") {
+			if (PL_dec())
+			{
+				if (t->getClassPart() == "}")
+				{
 					t->next();
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == ";" || t->getClassPart() == ",") {
+		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool class_st() {
-		if (class_choice()) {
-			if (t->getClassPart() == "class") {
+		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final" || t->getClassPart() == "class")
+		{
+			if (class_choice())
+			{
+				if (class_def())
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	bool class_def() {
+		if (t->getClassPart() == "class")
+		{
+			t->next();
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (t->getClassPart() == "ID") {
-					t->next();
-					if (inhrt()) {
-						if (t->getClassPart() == "{") {
-							t->next();
-							if (CB_MST()) {
-								if (t->getClassPart() == "}") {
-									t->next();
-									return true;
-								}
+				if (inhrt())
+				{
+					if (t->getClassPart() == "{")
+					{
+						t->next();
+						if (CB())
+						{
+							if (t->getClassPart() == "}")
+							{
+								t->next();
+								return true;
 							}
 						}
 					}
@@ -1743,106 +2430,158 @@ public:
 		}
 		return false;
 	}
-	bool CB_MST() {
-		if (t->getClassPart() == "static" || t->getClassPart() == "public" || t->getClassPart() == "protected" || t->getClassPart() == "private" || 
-			t->getClassPart() == "DT" || t->getClassPart() == "void" || t->getClassPart() == "ID") {
-			if (CB()) {
-				if (CB_MST()) {
-					return true;
-				}
-			}
-		}
-		else if (t->getClassPart() == "}") {
-			return true;
-		}
-		return false;
-	}
 
 	bool class_choice() {
-		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final") {
+		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final")
+		{
 			t->next();
 			return true;
 		}
-		else if (t->getClassPart() == "class") {
+		else if (t->getClassPart() == "class")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool inhrt() {
-		if (t->getClassPart() == "extends") {
+		if (t->getClassPart() == "extends")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (inhrt_choice()) {
+				if (inhrt_choice())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "{") {
+		else if (t->getClassPart() == "{")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool inhrt_choice() {
-		if (t->getClassPart() == ",") {
+		if (t->getClassPart() == ",")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (inhrt_choice()) {
+				if (inhrt_choice())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "{") {
+		else if (t->getClassPart() == "{")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool CB() {
-		if (t->getClassPart() == "static") {
+		if (t->getClassPart() == "static")
+		{
 			t->next();
-			if (acc_choice()) {
-				if (CB1()) {
-					return true;
-				}
+			if (CB_class())
+			{
+				return true;
 			}
 		}
-		else if (t->getClassPart() == "private" || t->getClassPart() == "public" || t->getClassPart() == "protected") {
-			if (access_modifiers()) {
-				if (static_choice()) {
-					if (CB1()) {
+		else if (t->getClassPart() == "private" || t->getClassPart() == "public" || t->getClassPart() == "protected")
+		{
+			if (access_modifiers())
+			{
+				if (static_choice())
+				{
+					if (CB1())
+					{
 						return true;
 					}
 				}
 			}
 		}
-		else if (t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void") {
-			if (CB1()) {
+		else if (t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void")
+		{
+			if (CB1())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "static" || t->getClassPart() == "public" || t->getClassPart() == "protected" || t->getClassPart() == "private"
-			|| t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void" || t->getClassPart() == "}") {
+		else if (t->getClassPart() == "abstract")
+		{
+			t->next();
+			if (class_def())
+			{
+				if (CB())
+				{
+					return true;
+				}
+			}
+		}
+		else if (t->getClassPart() == "final")
+		{
+			t->next();
+			if (class_def())
+			{
+				if (CB())
+				{
+					return true;
+				}
+			}
+		}
+		else if (class_def())
+		{
+			if (CB())
+			{
+				return true;
+			}
+		}
+		else if (t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
 
+	bool CB_class() {
+		if (acc_choice())
+		{
+			if (CB1())
+			{
+				return true;
+			}
+		}
+		else if (class_def())
+		{
+			if (CB())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	bool acc_choice() {
-		if (access_modifiers()) {
+		if (access_modifiers())
+		{
 			return true;
 		}
-		else if (t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void") {
+		else if (t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool access_modifiers() {
-		if (t->getClassPart() == "public" || t->getClassPart() == "private" || t->getClassPart() == "protected") {
+		if (t->getClassPart() == "public" || t->getClassPart() == "private" || t->getClassPart() == "protected")
+		{
 			t->next();
 			return true;
 		}
@@ -1850,37 +2589,48 @@ public:
 	}
 
 	bool static_choice() {
-		if (t->getClassPart() == "static") {
+		if (t->getClassPart() == "static")
+		{
 			t->next();
 			return true;
 		}
-		else if (t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void") {
+		else if (t->getClassPart() == "DT" || t->getClassPart() == "ID" || t->getClassPart() == "void")
+		{
 			return true;
 		}
 		return false;
 	}
 
 	bool CB1() {
-		if (t->getClassPart() == "DT") {
+		if (t->getClassPart() == "DT")
+		{
 			t->next();
-			if (fn1()) {
-				if (CB()) {
+			if (fn1())
+			{
+				if (CB())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "void") {
+		else if (t->getClassPart() == "void")
+		{
 			t->next();
-			if (func()) {
-				if (CB()) {
+			if (func())
+			{
+				if (CB())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "ID") {
+		else if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (fn2()) {
-				if (CB()) {
+			if (fn2())
+			{
+				if (CB())
+				{
 					return true;
 				}
 			}
@@ -1889,17 +2639,22 @@ public:
 	}
 
 	bool fn1() {
-		if (t->getClassPart() == "ID") {
+		if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (fn_simple()) {
+			if (fn_simple())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "[") {
+		else if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (t->getClassPart() == "]") {
+			if (t->getClassPart() == "]")
+			{
 				t->next();
-				if (fn_arr()) {
+				if (fn_arr())
+				{
 					return true;
 				}
 			}
@@ -1908,30 +2663,41 @@ public:
 	}
 
 	bool fn2() {
-		if (t->getClassPart() == "ID") {
+		if (t->getClassPart() == "ID")
+		{
 			t->next();
-			if (fn2_simple()) {
+			if (fn2_simple())
+			{
 				return true;
 			}
 		}
-		else if (t->getClassPart() == "[") {
+		else if (t->getClassPart() == "[")
+		{
 			t->next();
-			if (t->getClassPart() == "]") {
+			if (t->getClassPart() == "]")
+			{
 				t->next();
-				if (fn2_arr()) {
+				if (fn2_arr())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "(") {
+		else if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (def()) {
-				if (t->getClassPart() == ")") {
+			if (def())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
-					if (t->getClassPart() == "{") {
+					if (t->getClassPart() == "{")
+					{
 						t->next();
-						if (MST1()) {
-							if (t->getClassPart() == "}") {
+						if (MST1())
+						{
+							if (t->getClassPart() == "}")
+							{
 								t->next();
 								return true;
 							}
@@ -1944,15 +2710,21 @@ public:
 	}
 
 	bool fn_simple() {
-		if (t->getClassPart() == "(") {
+		if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (def()) {
-				if (t->getClassPart() == ")") {
+			if (def())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
-					if (t->getClassPart() == "{") {
+					if (t->getClassPart() == "{")
+					{
 						t->next();
-						if (MST1()) {
-							if (t->getClassPart() == "}") {
+						if (MST1())
+						{
+							if (t->getClassPart() == "}")
+							{
 								t->next();
 								return true;
 							}
@@ -1961,8 +2733,10 @@ public:
 				}
 			}
 		}
-		else if (init()) {
-			if (list()) {
+		else if (init())
+		{
+			if (list())
+			{
 				return true;
 			}
 		}
@@ -1970,15 +2744,21 @@ public:
 	}
 
 	bool fn2_simple() {
-		if (t->getClassPart() == "(") {
+		if (t->getClassPart() == "(")
+		{
 			t->next();
-			if (def()) {
-				if (t->getClassPart() == ")") {
+			if (def())
+			{
+				if (t->getClassPart() == ")")
+				{
 					t->next();
-					if (t->getClassPart() == "{") {
+					if (t->getClassPart() == "{")
+					{
 						t->next();
-						if (MST1()) {
-							if (t->getClassPart() == "}") {
+						if (MST1())
+						{
+							if (t->getClassPart() == "}")
+							{
 								t->next();
 								return true;
 							}
@@ -1987,8 +2767,10 @@ public:
 				}
 			}
 		}
-		else if (obj_init()) {
-			if (obj_list()) {
+		else if (obj_init())
+		{
+			if (obj_list())
+			{
 				return true;
 			}
 		}
@@ -1996,11 +2778,14 @@ public:
 	}
 
 	bool fn_arr() {
-		if (func()) {
+		if (func())
+		{
 			return true;
 		}
-		else if (init_arr()) {
-			if (list_arr()) {
+		else if (init_arr())
+		{
+			if (list_arr())
+			{
 				return true;
 			}
 		}
@@ -2008,11 +2793,14 @@ public:
 	}
 
 	bool fn2_arr() {
-		if (func()) {
+		if (func())
+		{
 			return true;
 		}
-		else if (obj_init_arr()) {
-			if (obj_list_arr()) {
+		else if (obj_init_arr())
+		{
+			if (obj_list_arr())
+			{
 				return true;
 			}
 		}
@@ -2020,29 +2808,37 @@ public:
 	}
 
 	bool class_rep() {
-		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final" || t->getClassPart() == "class") {
-			if (class_st()) {
-				if (class_rep()) {
+		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final" || t->getClassPart() == "class")
+		{
+			if (class_st())
+			{
+				if (class_rep())
+				{
 					return true;
 				}
 			}
 		}
-		else if (t->getClassPart() == "}") {
+		else if (t->getClassPart() == "}")
+		{
 			return true;
 		}
 		return false;
 	}
 
-	/*<S>  namespace ID { <class_rep> } */
 	bool S() {
-		if (t->getClassPart() == "namespace") {
+		if (t->getClassPart() == "namespace")
+		{
 			t->next();
-			if (t->getClassPart() == "ID") {
+			if (t->getClassPart() == "ID")
+			{
 				t->next();
-				if (t->getClassPart() == "{") {
+				if (t->getClassPart() == "{")
+				{
 					t->next();
-					if (class_rep()) {
-						if (t->getClassPart() == "}") {
+					if (class_rep())
+					{
+						if (t->getClassPart() == "}")
+						{
 							t->next();
 							return true;
 						}

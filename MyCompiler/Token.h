@@ -13,7 +13,7 @@ private:
 	string keyword[25] = { "if","else","for","while","void","return",
 		"break","continue","true","false","NULL","class","extends","private",
 		"public","protected","this","static","new","abstract","final","try","catch","finally","namespace"};
-	string DT[6] = { "int","float","char","string","bool","var" };
+	string DT[5] = { "int","float","char","string","bool" };
 	
 public:
 	void generateToken(string class_part, string value_part, int line_no) 
