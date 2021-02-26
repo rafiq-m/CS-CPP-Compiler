@@ -4,11 +4,13 @@ class SyntaxAnalyzer
 {
 	LinkedList* t;
 public:
-	SyntaxAnalyzer(LinkedList* tokens) {
+	SyntaxAnalyzer(LinkedList* tokens)
+	{
 		this->t = tokens;
 		checkSyntactically();
 	}
-	void checkSyntactically() {
+	void checkSyntactically()
+	{
 		if (S())
 		{
 			if (t->getClassPart() == "$")
@@ -20,7 +22,8 @@ public:
 			cout << "Error at Line No: " << t->getLineno() << "   " << t->getClassPart() << endl;
 	}
 
-	bool practice() {
+	bool practice()
+	{
 		if (t->getClassPart() == "ID")
 		{
 			t->next();
@@ -40,7 +43,8 @@ public:
 		return false;
 	}
 
-	bool dec() {
+	bool dec()
+	{
 		if (t->getClassPart() == "DT")
 		{
 			t->next();
@@ -52,7 +56,8 @@ public:
 		return false;
 	}
 
-	bool dec_choice() {
+	bool dec_choice()
+	{
 		if (t->getClassPart() == "[")
 		{
 			t->next();
@@ -86,7 +91,8 @@ public:
 		return false;
 	}
 
-	bool init() {
+	bool init()
+	{
 		if (t->getClassPart() == "=")
 		{
 			t->next();
@@ -102,7 +108,8 @@ public:
 		return false;
 	}
 
-	bool list() {
+	bool list()
+	{
 		if (t->getClassPart() == ";")
 		{
 			t->next();
@@ -126,7 +133,8 @@ public:
 		return false;
 	}
 
-	bool init_arr() {
+	bool init_arr()
+	{
 		if (t->getClassPart() == "=")
 		{
 			t->next();
@@ -142,7 +150,8 @@ public:
 		return false;
 	}
 
-	bool list_arr() {
+	bool list_arr()
+	{
 		if (t->getClassPart() == ";")
 		{
 			t->next();
@@ -166,7 +175,8 @@ public:
 		return false;
 	}
 
-	bool init_arr_choice() {
+	bool init_arr_choice()
+	{
 		if (t->getClassPart() == "new")
 		{
 			t->next();
@@ -214,7 +224,8 @@ public:
 		return false;
 	}
 
-	bool this_st() {
+	bool this_st()
+	{
 		if (t->getClassPart() == "this")
 		{
 			t->next();
@@ -231,7 +242,8 @@ public:
 		return false;
 	}
 
-	bool OE() {
+	bool OE()
+	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
@@ -247,7 +259,8 @@ public:
 		return false;
 	}
 
-	bool OE_() {
+	bool OE_()
+	{
 		if (t->getClassPart() == "||")
 		{
 			t->next();
@@ -266,7 +279,8 @@ public:
 		return false;
 	}
 
-	bool AE() {
+	bool AE()
+	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
@@ -282,7 +296,8 @@ public:
 		return false;
 	}
 
-	bool AE_() {
+	bool AE_()
+	{
 		if (t->getClassPart() == "&&")
 		{
 			t->next();
@@ -302,7 +317,8 @@ public:
 		return false;
 	}
 
-	bool RE() {
+	bool RE()
+	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
@@ -318,7 +334,8 @@ public:
 		return false;
 	}
 
-	bool RE_() {
+	bool RE_()
+	{
 		if (t->getClassPart() == "rop")
 		{
 			t->next();
@@ -338,7 +355,8 @@ public:
 		return false;
 	}
 
-	bool PE() {
+	bool PE()
+	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
@@ -354,7 +372,8 @@ public:
 		return false;
 	}
 
-	bool PE_() {
+	bool PE_()
+	{
 		if (t->getClassPart() == "pm")
 		{
 			t->next();
@@ -374,7 +393,8 @@ public:
 		return false;
 	}
 
-	bool ME() {
+	bool ME()
+	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
@@ -390,7 +410,8 @@ public:
 		return false;
 	}
 
-	bool ME_() {
+	bool ME_()
+	{
 		if (t->getClassPart() == "mdm")
 		{
 			t->next();
@@ -410,7 +431,8 @@ public:
 		return false;
 	}
 
-	bool F() {
+	bool F()
+	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false")
 		{
@@ -471,7 +493,8 @@ public:
 		return false;
 	}
 
-	bool XY() {
+	bool XY()
+	{
 		if (t->getClassPart() == "[")
 		{
 			t->next();
@@ -527,7 +550,8 @@ public:
 		return false;
 	}
 
-	bool XY2() {
+	bool XY2()
+	{
 		if (t->getClassPart() == ".")
 		{
 			t->next();
@@ -563,7 +587,8 @@ public:
 		return false;
 	}
 
-	bool XY1() {
+	bool XY1()
+	{
 		if (t->getClassPart() == ".")
 		{
 			t->next();
@@ -589,7 +614,8 @@ public:
 		return false;
 	}
 
-	bool constant() {
+	bool constant()
+	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false")
 		{
@@ -599,7 +625,8 @@ public:
 		return false;
 	}
 
-	bool PL() {
+	bool PL()
+	{
 		if (OE())
 		{
 			if (PL1())
@@ -614,7 +641,8 @@ public:
 		return false;
 	}
 
-	bool PL1() {
+	bool PL1()
+	{
 		if (t->getClassPart() == ",")
 		{
 			t->next();
@@ -633,7 +661,8 @@ public:
 		return false;
 	}
 	//some questions regarding first and follow set of X 
-	bool X() {
+	bool X()
+	{
 		if (t->getClassPart() == "[")
 		{
 			t->next();
@@ -688,7 +717,8 @@ public:
 		return false;
 	}
 
-	bool X1() {
+	bool X1()
+	{
 		if (t->getClassPart() == ".")
 		{
 			t->next();
@@ -712,7 +742,8 @@ public:
 		return false;
 	}
 
-	bool X2() {
+	bool X2()
+	{
 		if (t->getClassPart() == ".")
 		{
 			t->next();
@@ -751,7 +782,8 @@ public:
 		return false;
 	}
 
-	bool obj_dec() {
+	bool obj_dec()
+	{
 		if (t->getClassPart() == "ID")
 		{
 			t->next();
@@ -763,7 +795,8 @@ public:
 		return false;
 	}
 
-	bool obj_dec_choice() {
+	bool obj_dec_choice()
+	{
 		if (t->getClassPart() == "[")
 		{
 			t->next();
@@ -797,7 +830,8 @@ public:
 		return false;
 	}
 
-	bool obj_init() {
+	bool obj_init()
+	{
 		if (t->getClassPart() == "=")
 		{
 			t->next();
@@ -813,7 +847,8 @@ public:
 		return false;
 	}
 
-	bool obj_init_choice() {
+	bool obj_init_choice()
+	{
 		if (t->getClassPart() == "new")
 		{
 			t->next();
@@ -841,7 +876,8 @@ public:
 		return false;
 	}
 
-	bool obj_list() {
+	bool obj_list()
+	{
 		if (t->getClassPart() == ";")
 		{
 			t->next();
@@ -865,7 +901,8 @@ public:
 		return false;
 	}
 
-	bool obj_init_arr() {
+	bool obj_init_arr()
+	{
 		if (t->getClassPart() == "=")
 		{
 			t->next();
@@ -881,7 +918,8 @@ public:
 		return false;
 	}
 
-	bool obj_list_arr() {
+	bool obj_list_arr()
+	{
 		if (t->getClassPart() == ";")
 		{
 			t->next();
@@ -905,7 +943,8 @@ public:
 		return false;
 	}
 
-	bool obj_init_arr_choice() {
+	bool obj_init_arr_choice()
+	{
 		if (t->getClassPart() == "new")
 		{
 			t->next();
@@ -953,7 +992,8 @@ public:
 		return false;
 	}
 
-	bool PL_dec() {
+	bool PL_dec()
+	{
 		if (t->getClassPart() == "new")
 		{
 			t->next();
@@ -987,7 +1027,8 @@ public:
 		return false;
 	}
 
-	bool PL1_dec() {
+	bool PL1_dec()
+	{
 		if (t->getClassPart() == ",")
 		{
 			t->next();
@@ -1006,7 +1047,8 @@ public:
 		return false;
 	}
 
-	bool PL1_choice() {
+	bool PL1_choice()
+	{
 		if (t->getClassPart() == "new")
 		{
 			t->next();
@@ -1034,7 +1076,8 @@ public:
 		return false;
 	}
 
-	bool SST() {
+	bool SST()
+	{
 		if (if_else())
 		{
 			return true;
@@ -1128,7 +1171,8 @@ public:
 		return false;
 	}
 
-	bool ZZZ() {
+	bool ZZZ()
+	{
 		if (t->getClassPart() == "ID")
 		{
 			t->next();
@@ -1170,7 +1214,8 @@ public:
 		return false;
 	}
 
-	bool XY_dec() {
+	bool XY_dec()
+	{
 		if (OE())
 		{
 			if (t->getClassPart() == "]")
@@ -1200,7 +1245,8 @@ public:
 		return false;
 	}
 
-	bool XY_SST() {
+	bool XY_SST()
+	{
 		if (t->getClassPart() == "(")
 		{
 			t->next();
@@ -1272,7 +1318,8 @@ public:
 		return false;
 	}
 
-	bool XY1_SST() {
+	bool XY1_SST()
+	{
 		if (t->getClassPart() == ".")
 		{
 			t->next();
@@ -1309,7 +1356,8 @@ public:
 		return false;
 	}
 
-	bool XY2_SST() {
+	bool XY2_SST()
+	{
 		if (t->getClassPart() == ".")
 		{
 			t->next();
@@ -1345,7 +1393,8 @@ public:
 		return false;
 	}
 
-	bool MST() {
+	bool MST()
+	{
 		if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" ||
 			t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "continue" || t->getClassPart() == "break")
 		{
@@ -1364,7 +1413,8 @@ public:
 		return false;
 	}
 
-	bool for_st() {
+	bool for_st()
+	{
 		if (t->getClassPart() == "for")
 		{
 			t->next();
@@ -1405,7 +1455,8 @@ public:
 		return false;
 	}
 
-	bool c1() {
+	bool c1()
+	{
 		if (t->getClassPart() == "inc_dec")
 		{
 			t->next();
@@ -1469,7 +1520,8 @@ public:
 	}
 
 
-	bool for_ZZZ() {
+	bool for_ZZZ()
+	{
 		if (t->getClassPart() == "ID")
 		{
 			t->next();
@@ -1511,7 +1563,8 @@ public:
 		return false;
 	}
 
-	bool for_XY_dec() {
+	bool for_XY_dec()
+	{
 		if (OE())
 		{
 			if (t->getClassPart() == "]")
@@ -1541,7 +1594,8 @@ public:
 		return false;
 	}
 
-	bool for_XY_SST() {
+	bool for_XY_SST()
+	{
 		if (t->getClassPart() == "(")
 		{
 			t->next();
@@ -1613,7 +1667,8 @@ public:
 		return false;
 	}
 
-	bool for_XY1_SST() {
+	bool for_XY1_SST()
+	{
 		if (t->getClassPart() == ".")
 		{
 			t->next();
@@ -1650,7 +1705,8 @@ public:
 		return false;
 	}
 
-	bool for_XY2_SST() {
+	bool for_XY2_SST()
+	{
 		if (t->getClassPart() == ".")
 		{
 			t->next();
@@ -1681,7 +1737,8 @@ public:
 		return false;
 	}
 
-	bool c1_choice2() {
+	bool c1_choice2()
+	{
 		if (t->getClassPart() == "=")
 		{
 			t->next();
@@ -1706,7 +1763,8 @@ public:
 		return false;
 	}
 
-	bool c2() {
+	bool c2()
+	{
 		if (OE())
 		{
 			return true;
@@ -1718,7 +1776,8 @@ public:
 		return false;
 	}
 
-	bool c3() {
+	bool c3()
+	{
 		if (this_st())
 		{
 			if (t->getClassPart() == "ID")
@@ -1775,7 +1834,8 @@ public:
 		return false;
 	}
 
-	bool c3_choice() {
+	bool c3_choice()
+	{
 		if (t->getClassPart() == "inc_dec")
 		{
 			t->next();
@@ -1792,7 +1852,8 @@ public:
 		return false;
 	}
 
-	bool if_else() {
+	bool if_else()
+	{
 		if (t->getClassPart() == "if")
 		{
 			t->next();
@@ -1826,7 +1887,8 @@ public:
 		return false;
 	}
 
-	bool o_else() {
+	bool o_else()
+	{
 		if (t->getClassPart() == "else")
 		{
 			t->next();
@@ -1852,7 +1914,8 @@ public:
 		return false;
 	}
 
-	bool while_st() {
+	bool while_st()
+	{
 		if (t->getClassPart() == "while")
 		{
 			t->next();
@@ -1883,7 +1946,8 @@ public:
 		return false;
 	}
 
-	bool try_st() {
+	bool try_st()
+	{
 		if (t->getClassPart() == "try")
 		{
 			t->next();
@@ -1909,7 +1973,8 @@ public:
 		return false;
 	}
 
-	bool catch_st() {
+	bool catch_st()
+	{
 		if (t->getClassPart() == "catch")
 		{
 			t->next();
@@ -1948,7 +2013,8 @@ public:
 		return false;
 	}
 
-	bool catch_st1() {
+	bool catch_st1()
+	{
 		if (catch_st())
 		{
 			if (catch_st1())
@@ -1966,7 +2032,8 @@ public:
 		return false;
 	}
 
-	bool finally_st() {
+	bool finally_st()
+	{
 		if (t->getClassPart() == "finally")
 		{
 			t->next();
@@ -1992,7 +2059,8 @@ public:
 		return false;
 	}
 
-	bool func_dec() {
+	bool func_dec()
+	{
 		if (ret_type_choice())
 		{
 			if (t->getClassPart() == "ID")
@@ -2026,7 +2094,8 @@ public:
 		return false;
 	}
 
-	bool ret_type_choice() {
+	bool ret_type_choice()
+	{
 		if (ret_type())
 		{
 			return true;
@@ -2043,7 +2112,8 @@ public:
 		return false;
 	}
 
-	bool ret_type() {
+	bool ret_type()
+	{
 		if (t->getClassPart() == "DT")
 		{
 			t->next();
@@ -2063,7 +2133,8 @@ public:
 		return false;
 	}
 
-	bool ret_choice() {
+	bool ret_choice()
+	{
 		if (t->getClassPart() == "[")
 		{
 			t->next();
@@ -2080,7 +2151,8 @@ public:
 		return false;
 	}
 
-	bool def() {
+	bool def()
+	{
 		if (ret_type())
 		{
 			if (t->getClassPart() == "ID")
@@ -2099,7 +2171,8 @@ public:
 		return false;
 	}
 
-	bool more_def() {
+	bool more_def()
+	{
 		if (t->getClassPart() == ",")
 		{
 			t->next();
@@ -2122,7 +2195,8 @@ public:
 		return false;
 	}
 
-	bool SST1() {
+	bool SST1()
+	{
 		if (if_else())
 		{
 			return true;
@@ -2202,7 +2276,8 @@ public:
 		return false;
 	}
 
-	bool MST1() {
+	bool MST1()
+	{
 		if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" ||
 			t->getClassPart() == "inc_dec" || t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "return")
 		{
@@ -2221,7 +2296,8 @@ public:
 		return false;
 	}
 
-	bool func() {
+	bool func()
+	{
 		if (t->getClassPart() == "ID")
 		{
 			t->next();
@@ -2252,7 +2328,8 @@ public:
 		return false;
 	}
 
-	bool return_st() {
+	bool return_st()
+	{
 		if (t->getClassPart() == "return")
 		{
 			t->next();
@@ -2268,7 +2345,8 @@ public:
 		return false;
 	}
 
-	bool either_return() {
+	bool either_return()
+	{
 		if (OE())
 		{
 			return true;
@@ -2288,7 +2366,8 @@ public:
 		return false;
 	}
 
-	bool return1() {
+	bool return1()
+	{
 		if (t->getClassPart() == "ID")
 		{
 			t->next();
@@ -2319,7 +2398,8 @@ public:
 		return false;
 	}
 
-	bool return2() {
+	bool return2()
+	{
 		if (t->getClassPart() == "(")
 		{
 			t->next();
@@ -2350,7 +2430,8 @@ public:
 		return false;
 	}
 
-	bool return_choice() {
+	bool return_choice()
+	{
 		if (t->getClassPart() == "{")
 		{
 			t->next();
@@ -2370,7 +2451,8 @@ public:
 		return false;
 	}
 
-	bool return_obj_choice() {
+	bool return_obj_choice()
+	{
 		if (t->getClassPart() == "{")
 		{
 			t->next();
@@ -2390,7 +2472,8 @@ public:
 		return false;
 	}
 
-	bool class_st() {
+	bool class_st()
+	{
 		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final" || t->getClassPart() == "class")
 		{
 			if (class_choice())
@@ -2404,7 +2487,8 @@ public:
 		return false;
 	}
 
-	bool class_def() {
+	bool class_def()
+	{
 		if (t->getClassPart() == "class")
 		{
 			t->next();
@@ -2431,7 +2515,8 @@ public:
 		return false;
 	}
 
-	bool class_choice() {
+	bool class_choice()
+	{
 		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final")
 		{
 			t->next();
@@ -2444,7 +2529,8 @@ public:
 		return false;
 	}
 
-	bool inhrt() {
+	bool inhrt()
+	{
 		if (t->getClassPart() == "extends")
 		{
 			t->next();
@@ -2464,7 +2550,8 @@ public:
 		return false;
 	}
 
-	bool inhrt_choice() {
+	bool inhrt_choice()
+	{
 		if (t->getClassPart() == ",")
 		{
 			t->next();
@@ -2484,7 +2571,8 @@ public:
 		return false;
 	}
 
-	bool CB() {
+	bool CB()
+	{
 		if (t->getClassPart() == "static")
 		{
 			t->next();
@@ -2549,7 +2637,8 @@ public:
 		return false;
 	}
 
-	bool CB_class() {
+	bool CB_class()
+	{
 		if (acc_choice())
 		{
 			if (CB1())
@@ -2567,7 +2656,8 @@ public:
 		return false;
 	}
 
-	bool acc_choice() {
+	bool acc_choice()
+	{
 		if (access_modifiers())
 		{
 			return true;
@@ -2579,7 +2669,8 @@ public:
 		return false;
 	}
 
-	bool access_modifiers() {
+	bool access_modifiers()
+	{
 		if (t->getClassPart() == "public" || t->getClassPart() == "private" || t->getClassPart() == "protected")
 		{
 			t->next();
@@ -2588,7 +2679,8 @@ public:
 		return false;
 	}
 
-	bool static_choice() {
+	bool static_choice()
+	{
 		if (t->getClassPart() == "static")
 		{
 			t->next();
@@ -2601,7 +2693,8 @@ public:
 		return false;
 	}
 
-	bool CB1() {
+	bool CB1()
+	{
 		if (t->getClassPart() == "DT")
 		{
 			t->next();
@@ -2638,7 +2731,8 @@ public:
 		return false;
 	}
 
-	bool fn1() {
+	bool fn1()
+	{
 		if (t->getClassPart() == "ID")
 		{
 			t->next();
@@ -2662,7 +2756,8 @@ public:
 		return false;
 	}
 
-	bool fn2() {
+	bool fn2()
+	{
 		if (t->getClassPart() == "ID")
 		{
 			t->next();
@@ -2709,7 +2804,8 @@ public:
 		return false;
 	}
 
-	bool fn_simple() {
+	bool fn_simple()
+	{
 		if (t->getClassPart() == "(")
 		{
 			t->next();
@@ -2743,7 +2839,8 @@ public:
 		return false;
 	}
 
-	bool fn2_simple() {
+	bool fn2_simple()
+	{
 		if (t->getClassPart() == "(")
 		{
 			t->next();
@@ -2777,7 +2874,8 @@ public:
 		return false;
 	}
 
-	bool fn_arr() {
+	bool fn_arr()
+	{
 		if (func())
 		{
 			return true;
@@ -2792,7 +2890,8 @@ public:
 		return false;
 	}
 
-	bool fn2_arr() {
+	bool fn2_arr()
+	{
 		if (func())
 		{
 			return true;
@@ -2807,7 +2906,8 @@ public:
 		return false;
 	}
 
-	bool class_rep() {
+	bool class_rep()
+	{
 		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final" || t->getClassPart() == "class")
 		{
 			if (class_st())
@@ -2825,7 +2925,8 @@ public:
 		return false;
 	}
 
-	bool S() {
+	bool S()
+	{
 		if (t->getClassPart() == "namespace")
 		{
 			t->next();
