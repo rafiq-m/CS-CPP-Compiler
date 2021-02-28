@@ -1,7 +1,28 @@
 ﻿#pragma once
 #include "LinkedList.h"
+#include "MainTable.h"
+#include "FunctionTable.h"
+#include <stack>
+#include "ClassTable.h"
 class SyntaxAnalyzer
 {
+	stack<string> my_stack;
+	string class_name = "empty";
+	string class_type;
+	string class_access_modifier;
+	string class_parent;
+	string class_category;
+	MainTable* maintable = new MainTable();
+
+	string global_type;
+
+	int current_scope;
+	ClassTable* classtable = new ClassTable();
+	FunctionTable* functiontable = new FunctionTable();
+	string name;
+	string type;
+	string type_def;
+	string ret_def;
 	LinkedList* t;
 public:
 	SyntaxAnalyzer(LinkedList* tokens)
@@ -20,6 +41,7 @@ public:
 		}
 		else
 			cout << "Error at Line No: " << t->getLineno() << "   " << t->getClassPart() << endl;
+		maintable->printMainTable();
 	}
 
 	bool practice()
@@ -66,6 +88,17 @@ public:
 				t->next();
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					type += "[]";
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					if (functiontable->insertFT(name, type, current_scope))
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						cout << "Variable Redeclration Error at Line no: " << t->getLineno() << endl;
+					}
 					t->next();
 					if (init_arr())
 					{
@@ -79,6 +112,16 @@ public:
 		}
 		else if (t->getClassPart() == "ID")
 		{
+			name = t->getValuePart();
+			functiontable = maintable->findFunctionTable(my_stack.top());
+			if (functiontable->insertFT(name, type, current_scope))
+			{
+				functiontable->printFunctionTable();
+			}
+			else
+			{
+				cout << "Variable Redeclration Error at Line no: " << t->getLineno() << endl;
+			}
 			t->next();
 			if (init())
 			{
@@ -96,7 +139,8 @@ public:
 		if (t->getClassPart() == "=")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				return true;
 			}
@@ -186,7 +230,8 @@ public:
 				if (t->getClassPart() == "[")
 				{
 					t->next();
-					if (OE())
+					string T4 = "";
+					if (OE(T4))
 					{
 						if (t->getClassPart() == "]")
 						{
@@ -242,16 +287,18 @@ public:
 		return false;
 	}
 
-	bool OE()
-	{
+	bool OE(string &T)
+	{	
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			if (AE())
+			string T1 = "";
+			if (AE(T1))
 			{
-				if (OE_())
+				if (OE_(T1, T))
 				{
+					if (T == "") T = T1;
 					return true;
 				}
 			}
@@ -259,14 +306,21 @@ public:
 		return false;
 	}
 
-	bool OE_()
+	bool OE_(string T1, string &T)
 	{
 		if (t->getClassPart() == "||")
 		{
+			string opr = t->getClassPart();
 			t->next();
-			if (AE())
+			string T2 = "";
+			if (AE(T2))
 			{
-				if (OE_())
+				string T3 = compatibilityCheck(T1, T2, opr);
+				if (T3 == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
+				if (OE_(T3, T))
 				{
 					return true;
 				}
@@ -274,21 +328,24 @@ public:
 		}
 		else if (t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
 		{
+			T = T1;
 			return true;
 		}
 		return false;
 	}
 
-	bool AE()
+	bool AE(string &T)
 	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			if (RE())
+			string T1 = "";
+			if (RE(T1))
 			{
-				if (AE_())
+				if (AE_(T1, T))
 				{
+					if (T == "") T = T1;
 					return true;
 				}
 			}
@@ -296,15 +353,23 @@ public:
 		return false;
 	}
 
-	bool AE_()
+	bool AE_(string T1, string& T)
 	{
 		if (t->getClassPart() == "&&")
 		{
+			string opr = t->getClassPart();
 			t->next();
-			if (RE())
+			string T2 = "";
+			if (RE(T2))
 			{
-				if (AE_())
+				string T3 = compatibilityCheck(T1, T2, opr);
+				if (T3 == "Incompatible")
 				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
+				if (AE_(T3, T))
+				{
+					if (T == "") T = T1;
 					return true;
 				}
 			}
@@ -312,20 +377,22 @@ public:
 		else if (t->getClassPart() == "||" ||
 			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
 		{
+			T = T1;
 			return true;
 		}
 		return false;
 	}
 
-	bool RE()
+	bool RE(string &T)
 	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			if (PE())
+			string T1 = "";
+			if (PE(T1))
 			{
-				if (RE_())
+				if (RE_(T1 , T))
 				{
 					return true;
 				}
@@ -334,15 +401,23 @@ public:
 		return false;
 	}
 
-	bool RE_()
+	bool RE_(string T1, string& T)
 	{
 		if (t->getClassPart() == "rop")
 		{
+			string opr = t->getValuePart();
 			t->next();
-			if (PE())
+			string T2 = "";
+			if (PE(T2))
 			{
-				if (RE_())
+				string T3 = compatibilityCheck(T1, T2, opr);
+				if (T3 == "Incompatible")
 				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
+				if (RE_(T3,T))
+				{
+					if (T == "") T = T1;
 					return true;
 				}
 			}
@@ -350,20 +425,22 @@ public:
 		else if (t->getClassPart() == "&&" || t->getClassPart() == "||" ||
 			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
 		{
+			T = T1;
 			return true;
 		}
 		return false;
 	}
 
-	bool PE()
+	bool PE(string &T)
 	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			if (ME())
+			string T1 = "";
+			if (ME(T1))
 			{
-				if (PE_())
+				if (PE_(T1, T))
 				{
 					return true;
 				}
@@ -372,14 +449,21 @@ public:
 		return false;
 	}
 
-	bool PE_()
+	bool PE_(string T1, string& T)
 	{
 		if (t->getClassPart() == "pm")
 		{
+			string opr = t->getValuePart();
 			t->next();
-			if (ME())
+			string T2 = "";
+			if (ME(T2))
 			{
-				if (PE_())
+				string T3 = compatibilityCheck(T1, T2, opr);
+				if (T3 == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
+				if (PE_(T3 ,T))
 				{
 					return true;
 				}
@@ -388,20 +472,22 @@ public:
 		else if (t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||" ||
 			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
 		{
+			T = T1;
 			return true;
 		}
 		return false;
 	}
 
-	bool ME()
+	bool ME(string &T)
 	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
 			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			if (F())
+			string T1 = "";
+			if (F(T1))
 			{
-				if (ME_())
+				if (ME_(T1,T))
 				{
 					return true;
 				}
@@ -410,15 +496,23 @@ public:
 		return false;
 	}
 
-	bool ME_()
+	bool ME_(string T1, string& T)
 	{
 		if (t->getClassPart() == "mdm")
 		{
+			string opr = t->getValuePart();
 			t->next();
-			if (F())
+			string T2 = "";
+			if (F(T2))
 			{
-				if (ME_())
+				string T3 = compatibilityCheck(T1, T2, opr);
+				if (T3 == "Incompatible")
 				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
+				if (ME_(T3, T))
+				{
+					if (T == "") T = T1;
 					return true;
 				}
 			}
@@ -426,25 +520,29 @@ public:
 		else if (t->getClassPart() == "pm" || t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||" ||
 			t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == ";" || t->getClassPart() == "," || t->getClassPart() == "}")
 		{
+			T = T1;
 			return true;
 		}
 		return false;
 	}
 
-	bool F()
+	bool F(string &T)
 	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false")
 		{
-			if (constant())
+			string T1 = "";
+			if (constant(T1))
 			{
+				T = T1;
 				return true;
 			}
 		}
 		else if (t->getClassPart() == "(")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == ")")
 				{
@@ -456,7 +554,8 @@ public:
 		else if (t->getClassPart() == "!")
 		{
 			t->next();
-			if (F())
+			string T4 = "";
+			if (F(T))
 			{
 				return true;
 			}
@@ -467,6 +566,19 @@ public:
 			{
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					T = functiontable->lookUpFT(name, current_scope, scope);
+					if (T == "NULL")
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						T = classtable->lookUpCT(name);
+						if (T == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
 					t->next();
 					if (XY())
 					{
@@ -498,7 +610,8 @@ public:
 		if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -567,7 +680,8 @@ public:
 		else if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -614,11 +728,12 @@ public:
 		return false;
 	}
 
-	bool constant()
+	bool constant(string &T)
 	{
 		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
 			|| t->getClassPart() == "true" || t->getClassPart() == "false")
 		{
+			T = ConstType(t->getClassPart());
 			t->next();
 			return true;
 		}
@@ -627,7 +742,8 @@ public:
 
 	bool PL()
 	{
-		if (OE())
+		string T4 = "";
+		if (OE(T4))
 		{
 			if (PL1())
 			{
@@ -646,7 +762,8 @@ public:
 		if (t->getClassPart() == ",")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (PL1())
 				{
@@ -666,7 +783,8 @@ public:
 		if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -707,10 +825,8 @@ public:
 		}
 		//Follow Of X // kuch masley hain isme miss se discuss karna he
 		else if (t->getClassPart() == ";" || t->getClassPart() == "pm" || t->getClassPart() == "mdm" || t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||"
-			|| t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == "," || t->getClassPart() == "}" || t->getClassPart() == "if"
-			|| t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" || t->getClassPart() == "inc_dec"
-			|| t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return"
-			|| t->getClassPart() == "=")
+			|| t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == "," || t->getClassPart() == "}"
+			|| t->getClassPart() == "=" || t->getClassPart() == "inc_dec")
 		{
 			return true;
 		}
@@ -732,10 +848,8 @@ public:
 			}
 		}
 		else if (t->getClassPart() == ";" || t->getClassPart() == "mdm" || t->getClassPart() == "rop" || t->getClassPart() == "&&" || t->getClassPart() == "||"
-			|| t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == "," || t->getClassPart() == "}" || t->getClassPart() == "if"
-			|| t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try" || t->getClassPart() == "this" || t->getClassPart() == "inc_dec"
-			|| t->getClassPart() == "ID" || t->getClassPart() == "DT" || t->getClassPart() == "continue" || t->getClassPart() == "break" || t->getClassPart() == "return"
-			|| t->getClassPart() == "=")
+			|| t->getClassPart() == ")" || t->getClassPart() == "]" || t->getClassPart() == "," || t->getClassPart() == "}"
+			|| t->getClassPart() == "=" || t->getClassPart() == "inc_dec")
 		{
 			return true;
 		}
@@ -759,7 +873,8 @@ public:
 		else if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -869,9 +984,15 @@ public:
 				}
 			}
 		}
-		else if (OE())
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			return true;
+			string T4 = "";
+			if (OE(T4))
+			{
+				return true;
+			}
 		}
 		return false;
 	}
@@ -954,7 +1075,8 @@ public:
 				if (t->getClassPart() == "[")
 				{
 					t->next();
-					if (OE())
+					string T4 = "";
+					if (OE(T4))
 					{
 						if (t->getClassPart() == "]")
 						{
@@ -1017,11 +1139,17 @@ public:
 				}
 			}
 		}
-		else if (OE())
+		else if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			if (PL1_dec())
+			string T4 = "";
+			if (OE(T4))
 			{
-				return true;
+				if (PL1_dec())
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -1069,26 +1197,43 @@ public:
 				}
 			}
 		}
-		else if (OE())
+		else if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			return true;
+			string T4 = "";
+			if (OE(T4))
+			{
+				return true;
+			}
 		}
 		return false;
 	}
 
 	bool SST()
 	{
-		if (if_else())
+		name = "";
+		type = "";
+		if (t->getClassPart() == "if")
 		{
-			return true;
+			if (if_else())
+			{
+				return true;
+			}
 		}
-		else if (while_st())
+		if (t->getClassPart() == "while")
 		{
-			return true;
+			if (while_st())
+			{
+				return true;
+			}
 		}
-		else if (for_st())
+		else if (t->getClassPart() == "for")
 		{
-			return true;
+			if (for_st())
+			{
+				return true;
+			}
 		}
 		else if (t->getClassPart() == "inc_dec")
 		{
@@ -1097,6 +1242,21 @@ public:
 			{
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
 					t->next();
 					if (X())
 					{
@@ -1117,6 +1277,21 @@ public:
 				t->next();
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
 					t->next();
 					if (XY_SST())
 					{
@@ -1127,6 +1302,7 @@ public:
 		}
 		else if (t->getClassPart() == "ID")
 		{
+			type = t->getValuePart();
 			t->next();
 			if (ZZZ())
 			{
@@ -1139,6 +1315,7 @@ public:
 		}
 		else if (t->getClassPart() == "DT")
 		{
+			type = t->getValuePart();
 			t->next();
 			if (dec_choice())
 			{
@@ -1175,6 +1352,16 @@ public:
 	{
 		if (t->getClassPart() == "ID")
 		{
+			name = t->getValuePart();
+			functiontable = maintable->findFunctionTable(my_stack.top());
+			if (functiontable->insertFT(name, type, current_scope))
+			{
+				functiontable->printFunctionTable();
+			}
+			else
+			{
+				cout << "Variable Redeclration Error at Line no: " << t->getLineno() << endl;
+			}
 			t->next();
 			if (obj_init())
 			{
@@ -1192,9 +1379,27 @@ public:
 				return true;
 			}
 		}
-		else if (XY1_SST())
+		else if (t->getClassPart() == "." || t->getClassPart() == "inc_dec" || t->getClassPart() == "=")
 		{
-			return true;
+			functiontable = maintable->findFunctionTable(my_stack.top());
+			stack<int> scope = maintable->stack_scope;
+			if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+			{
+				functiontable->printFunctionTable();
+			}
+			else
+			{
+				classtable = maintable->findClassTable(my_stack.top());
+				if (classtable->lookUpCT(name) == "NULL")
+				{
+					cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+				}
+			}
+			t->next();
+			if (XY1_SST())
+			{
+				return true;
+			}
 		}
 		else if (t->getClassPart() == "(")
 		{
@@ -1216,14 +1421,20 @@ public:
 
 	bool XY_dec()
 	{
-		if (OE())
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			if (t->getClassPart() == "]")
+			string T4 = "";
+			if (OE(T4))
 			{
-				t->next();
-				if (XY1_SST())
+				if (t->getClassPart() == "]")
 				{
-					return true;
+					t->next();
+					if (XY1_SST())
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -1232,6 +1443,17 @@ public:
 			t->next();
 			if (t->getClassPart() == "ID")
 			{
+				name = t->getValuePart();
+				type += "[]";
+				functiontable = maintable->findFunctionTable(my_stack.top());
+				if (functiontable->insertFT(name, type, current_scope))
+				{
+					functiontable->printFunctionTable();
+				}
+				else
+				{
+					cout << "Variable Redeclration Error at Line no: " << t->getLineno() << endl;
+				}
 				t->next();
 				if (obj_init_arr())
 				{
@@ -1286,7 +1508,8 @@ public:
 		else if (t->getClassPart() == "=")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == ";")
 				{
@@ -1298,7 +1521,8 @@ public:
 		else if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -1344,7 +1568,8 @@ public:
 		else if (t->getClassPart() == "=")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == ";")
 				{
@@ -1373,7 +1598,8 @@ public:
 		else if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -1420,6 +1646,7 @@ public:
 			t->next();
 			if (t->getClassPart() == "(")
 			{
+				current_scope = maintable->createScope();
 				t->next();
 				if (c1())
 				{
@@ -1440,6 +1667,7 @@ public:
 										{
 											if (t->getClassPart() == "}")
 											{
+												current_scope = maintable->deleteScope();
 												t->next();
 												return true;
 											}
@@ -1464,6 +1692,21 @@ public:
 			{
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
 					t->next();
 					if (X())
 					{
@@ -1478,6 +1721,7 @@ public:
 		}
 		else if (t->getClassPart() == "DT")
 		{
+			type = t->getValuePart();
 			t->next();
 			if (dec_choice())
 			{
@@ -1492,6 +1736,21 @@ public:
 				t->next();
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
 					t->next();
 					if (X())
 					{
@@ -1505,6 +1764,7 @@ public:
 		}
 		else if (t->getClassPart() == "ID")
 		{
+			type = t->getValuePart();
 			t->next();
 			if (for_ZZZ())
 			{
@@ -1524,6 +1784,16 @@ public:
 	{
 		if (t->getClassPart() == "ID")
 		{
+			name = t->getValuePart();
+			functiontable = maintable->findFunctionTable(my_stack.top());
+			if (functiontable->insertFT(name, type, current_scope))
+			{
+				functiontable->printFunctionTable();
+			}
+			else
+			{
+				cout << "Variable Redeclration Error at Line no: " << t->getLineno() << endl;
+			}
 			t->next();
 			if (obj_init())
 			{
@@ -1565,14 +1835,20 @@ public:
 
 	bool for_XY_dec()
 	{
-		if (OE())
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			if (t->getClassPart() == "]")
+			string T4 = "";
+			if (OE(T4))
 			{
-				t->next();
-				if (for_XY1_SST())
+				if (t->getClassPart() == "]")
 				{
-					return true;
+					t->next();
+					if (for_XY1_SST())
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -1581,6 +1857,17 @@ public:
 			t->next();
 			if (t->getClassPart() == "ID")
 			{
+				name = t->getValuePart();
+				type += "[]";
+				functiontable = maintable->findFunctionTable(my_stack.top());
+				if (functiontable->insertFT(name, type, current_scope))
+				{
+					functiontable->printFunctionTable();
+				}
+				else
+				{
+					cout << "Variable Redeclration Error at Line no: " << t->getLineno() << endl;
+				}
 				t->next();
 				if (obj_init_arr())
 				{
@@ -1635,7 +1922,8 @@ public:
 		else if (t->getClassPart() == "=")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == ";")
 				{
@@ -1647,7 +1935,8 @@ public:
 		else if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -1693,7 +1982,8 @@ public:
 		else if (t->getClassPart() == "=")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == ";")
 				{
@@ -1722,7 +2012,8 @@ public:
 		else if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -1742,7 +2033,8 @@ public:
 		if (t->getClassPart() == "=")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == ";")
 				{
@@ -1765,9 +2057,16 @@ public:
 
 	bool c2()
 	{
-		if (OE())
+
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			return true;
+			string T4 = "";
+			if (OE(T4))
+			{
+				return true;
+			}
 		}
 		else if (t->getClassPart() == ";")
 		{
@@ -1778,16 +2077,37 @@ public:
 
 	bool c3()
 	{
-		if (this_st())
+		if (t->getClassPart() == "this" || t->getClassPart() == "ID")
 		{
-			if (t->getClassPart() == "ID")
+			if (this_st())
 			{
-				t->next();
-				if (X())
+				if (t->getClassPart() == "ID")
 				{
-					if (c3_choice())
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
 					{
-						return true;
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
+					t->next();
+					if (X())
+					{
+						if (c3_choice())
+						{
+							if (c3_more_choice())
+							{
+								return true;
+							}
+						}
 					}
 				}
 			}
@@ -1799,10 +2119,28 @@ public:
 			{
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
 					t->next();
 					if (X())
 					{
-						return true;
+						if (c3_more_choice())
+						{
+							return true;
+						}
 					}
 				}
 			}
@@ -1821,7 +2159,10 @@ public:
 						if (t->getClassPart() == ")")
 						{
 							t->next();
-							return true;
+							if (c3_more_choice())
+							{
+								return true;
+							}
 						}
 					}
 				}
@@ -1844,9 +2185,126 @@ public:
 		else if (t->getClassPart() == "=")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				return true;
+			}
+		}
+		return false;
+	}
+
+	bool c3_more_choice()
+	{
+		if (t->getClassPart() == ",")
+		{
+			t->next();
+			if (c3_must())
+			{
+				if (c3_more_choice())
+				{
+					return true;
+				}
+			}
+		}
+		else if (t->getClassPart() == ")")
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool c3_must()
+	{
+		if (t->getClassPart() == "this" || t->getClassPart() == "ID")
+		{
+			if (this_st())
+			{
+				if (t->getClassPart() == "ID")
+				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
+					t->next();
+					if (X())
+					{
+						if (c3_choice())
+						{
+							if (c3_more_choice())
+							{
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (t->getClassPart() == "inc_dec")
+		{
+			t->next();
+			if (this_st())
+			{
+				if (t->getClassPart() == "ID")
+				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
+					t->next();
+					if (X())
+					{
+						if (c3_more_choice())
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+		else if (t->getClassPart() == "new")
+		{
+			t->next();
+			if (t->getClassPart() == "ID")
+			{
+				t->next();
+				if (t->getClassPart() == "(")
+				{
+					t->next();
+					if (PL())
+					{
+						if (t->getClassPart() == ")")
+						{
+							t->next();
+							if (c3_more_choice())
+							{
+								return true;
+							}
+						}
+					}
+				}
 			}
 		}
 		return false;
@@ -1859,8 +2317,10 @@ public:
 			t->next();
 			if (t->getClassPart() == "(")
 			{
+				current_scope = maintable->createScope();
 				t->next();
-				if (OE())
+				string T4 = "";
+				if (OE(T4))
 				{
 					if (t->getClassPart() == ")")
 					{
@@ -1872,6 +2332,7 @@ public:
 							{
 								if (t->getClassPart() == "}")
 								{
+									current_scope = maintable->deleteScope();
 									t->next();
 									if (o_else())
 									{
@@ -1892,17 +2353,9 @@ public:
 		if (t->getClassPart() == "else")
 		{
 			t->next();
-			if (t->getClassPart() == "{")
+			if (if_choice())
 			{
-				t->next();
-				if (MST())
-				{
-					if (t->getClassPart() == "}")
-					{
-						t->next();
-						return true;
-					}
-				}
+				return true;
 			}
 		}
 		else if (t->getClassPart() == "if" || t->getClassPart() == "while" || t->getClassPart() == "for" || t->getClassPart() == "try"
@@ -1914,6 +2367,30 @@ public:
 		return false;
 	}
 
+	bool if_choice()
+	{
+		if (t->getClassPart() == "if")
+		{
+			if (if_else())
+			{
+				return true;
+			}
+		}
+		else if (t->getClassPart() == "{")
+		{
+			t->next();
+			if (MST())
+			{
+				if (t->getClassPart() == "}")
+				{
+					t->next();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	bool while_st()
 	{
 		if (t->getClassPart() == "while")
@@ -1921,8 +2398,10 @@ public:
 			t->next();
 			if (t->getClassPart() == "(")
 			{
+				current_scope = maintable->createScope();
 				t->next();
-				if (OE())
+				string T4 = "";
+				if (OE(T4))
 				{
 					if (t->getClassPart() == ")")
 					{
@@ -1934,6 +2413,7 @@ public:
 							{
 								if (t->getClassPart() == "}")
 								{
+									current_scope = maintable->deleteScope();
 									t->next();
 									return true;
 								}
@@ -1953,11 +2433,13 @@ public:
 			t->next();
 			if (t->getClassPart() == "{")
 			{
+				current_scope = maintable->createScope();
 				t->next();
 				if (MST())
 				{
 					if (t->getClassPart() == "}")
 					{
+						current_scope = maintable->deleteScope();
 						t->next();
 						if (catch_st())
 						{
@@ -1980,6 +2462,7 @@ public:
 			t->next();
 			if (t->getClassPart() == "(")
 			{
+				current_scope = maintable->createScope();
 				t->next();
 				if (t->getClassPart() == "ID")
 				{
@@ -1997,6 +2480,7 @@ public:
 								{
 									if (t->getClassPart() == "}")
 									{
+										current_scope = maintable->deleteScope();
 										t->next();
 										if (catch_st1())
 										{
@@ -2039,11 +2523,13 @@ public:
 			t->next();
 			if (t->getClassPart() == "{")
 			{
+				current_scope = maintable->createScope();
 				t->next();
 				if (MST())
 				{
 					if (t->getClassPart() == "}")
 					{
+						current_scope = maintable->deleteScope();
 						t->next();
 						return true;
 					}
@@ -2096,9 +2582,12 @@ public:
 
 	bool ret_type_choice()
 	{
-		if (ret_type())
+		if (t->getClassPart() == "DT" || t->getClassPart() == "ID")
 		{
-			return true;
+			if (ret_type())
+			{
+				return true;
+			}
 		}
 		else if (t->getClassPart() == "void")
 		{
@@ -2116,6 +2605,8 @@ public:
 	{
 		if (t->getClassPart() == "DT")
 		{
+			type_def += t->getValuePart() + " ";
+			type = t->getValuePart();
 			t->next();
 			if (ret_choice())
 			{
@@ -2124,6 +2615,8 @@ public:
 		}
 		else if (t->getClassPart() == "ID")
 		{
+			type_def += t->getValuePart() + " ";
+			type = t->getValuePart();
 			t->next();
 			if (ret_choice())
 			{
@@ -2140,6 +2633,7 @@ public:
 			t->next();
 			if (t->getClassPart() == "]")
 			{
+				type += "[]";
 				t->next();
 				return true;
 			}
@@ -2153,14 +2647,29 @@ public:
 
 	bool def()
 	{
-		if (ret_type())
+		name = "";
+		type_def = "";
+		if (t->getClassPart() == "DT" || t->getClassPart() == "ID")
 		{
-			if (t->getClassPart() == "ID")
+			if (ret_type())
 			{
-				t->next();
-				if (more_def())
+				if (t->getClassPart() == "ID")
 				{
-					return true;
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					if (functiontable->insertFT(name, type, current_scope))
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						cout << "Variable Redeclaration Error at Line no: " << t->getLineno() << endl;
+					}
+					t->next();
+					if (more_def())
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -2173,6 +2682,8 @@ public:
 
 	bool more_def()
 	{
+		type = "";
+		name = "";
 		if (t->getClassPart() == ",")
 		{
 			t->next();
@@ -2180,6 +2691,16 @@ public:
 			{
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					if (functiontable->insertFT(name, type, current_scope))
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						cout << "Variable Redeclaration Error at Line no: " << t->getLineno() << endl;
+					}
 					t->next();
 					if (more_def())
 					{
@@ -2197,17 +2718,28 @@ public:
 
 	bool SST1()
 	{
-		if (if_else())
+		name = "";
+		type = "";
+		if (t->getClassPart() == "if")
 		{
-			return true;
+			if (if_else())
+			{
+				return true;
+			}
 		}
-		else if (while_st())
+		if (t->getClassPart() == "while")
 		{
-			return true;
+			if (while_st())
+			{
+				return true;
+			}
 		}
-		else if (for_st())
+		else if (t->getClassPart() == "for")
 		{
-			return true;
+			if (for_st())
+			{
+				return true;
+			}
 		}
 		else if (t->getClassPart() == "inc_dec")
 		{
@@ -2216,6 +2748,21 @@ public:
 			{
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
 					t->next();
 					if (X())
 					{
@@ -2236,6 +2783,21 @@ public:
 				t->next();
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					{
+						functiontable->printFunctionTable();
+					}
+					else
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						if (classtable->lookUpCT(name) == "NULL")
+						{
+							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
 					t->next();
 					if (XY_SST())
 					{
@@ -2246,6 +2808,8 @@ public:
 		}
 		else if (t->getClassPart() == "ID")
 		{
+			type = t->getValuePart();
+			name = t->getValuePart();
 			t->next();
 			if (ZZZ())
 			{
@@ -2258,6 +2822,7 @@ public:
 		}
 		else if (t->getClassPart() == "DT")
 		{
+			type = t->getValuePart();
 			t->next();
 			if (dec_choice())
 			{
@@ -2300,12 +2865,23 @@ public:
 	{
 		if (t->getClassPart() == "ID")
 		{
+			string func_name = t->getValuePart();
 			t->next();
 			if (t->getClassPart() == "(")
 			{
+				current_scope = maintable->createScope();
 				t->next();
 				if (def())
 				{
+					classtable = maintable->findClassTable(my_stack.top());
+					if (classtable->insertCT(func_name, type_def + "->" + ret_def, class_access_modifier, class_category))
+					{
+						classtable->printClassTable();
+					}
+					else
+					{
+						cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+					}
 					if (t->getClassPart() == ")")
 					{
 						t->next();
@@ -2316,6 +2892,7 @@ public:
 							{
 								if (t->getClassPart() == "}")
 								{
+									current_scope = maintable->deleteScope();
 									t->next();
 									return true;
 								}
@@ -2347,9 +2924,15 @@ public:
 
 	bool either_return()
 	{
-		if (OE())
+		if (t->getClassPart() == "int_const" || t->getClassPart() == "float_const" || t->getClassPart() == "char_const" || t->getClassPart() == "string_const"
+			|| t->getClassPart() == "true" || t->getClassPart() == "false" || t->getClassPart() == "("
+			|| t->getClassPart() == "!" || t->getClassPart() == "this" || t->getClassPart() == "ID" || t->getClassPart() == "inc_dec")
 		{
-			return true;
+			string T4 = "";
+			if (OE(T4))
+			{
+				return true;
+			}
 		}
 		else if (t->getClassPart() == "new")
 		{
@@ -2382,7 +2965,8 @@ public:
 			if (t->getClassPart() == "[")
 			{
 				t->next();
-				if (OE())
+				string T4 = "";
+				if (OE(T4))
 				{
 					if (t->getClassPart() == "]")
 					{
@@ -2415,7 +2999,8 @@ public:
 		else if (t->getClassPart() == "[")
 		{
 			t->next();
-			if (OE())
+			string T4 = "";
+			if (OE(T4))
 			{
 				if (t->getClassPart() == "]")
 				{
@@ -2489,21 +3074,38 @@ public:
 
 	bool class_def()
 	{
+		class_access_modifier = "public";
 		if (t->getClassPart() == "class")
 		{
+			class_type = "class";
 			t->next();
 			if (t->getClassPart() == "ID")
 			{
+				class_name = t->getValuePart();
+				my_stack.push(class_name);
+				class_access_modifier = "public";
 				t->next();
 				if (inhrt())
 				{
 					if (t->getClassPart() == "{")
 					{
+						current_scope = maintable->createScope();
+						if (!maintable->insertMainTable(class_name, class_type, class_access_modifier, class_category, class_parent, new ClassTable(), new FunctionTable()))
+						{
+							cout << "Redeclaration Error of Class at Line Number: " << t->getLineno() << endl;
+						}
+						else
+						{
+							cout << "entry Successfull !" << endl;
+						}
 						t->next();
 						if (CB())
 						{
 							if (t->getClassPart() == "}")
 							{
+								current_scope = maintable->deleteScope();
+								class_name = my_stack.top();
+								my_stack.pop();
 								t->next();
 								return true;
 							}
@@ -2519,6 +3121,7 @@ public:
 	{
 		if (t->getClassPart() == "static" || t->getClassPart() == "abstract" || t->getClassPart() == "final")
 		{
+			class_category = t->getClassPart();
 			t->next();
 			return true;
 		}
@@ -2531,11 +3134,26 @@ public:
 
 	bool inhrt()
 	{
+		class_parent = "NULL";
 		if (t->getClassPart() == "extends")
 		{
 			t->next();
 			if (t->getClassPart() == "ID")
 			{
+				string type, category;
+				type = maintable->lookupMT(t->getValuePart(), &category);
+				if (type == "NULL")
+				{
+					cout << "Undeclared Identifier at Line no: " << t->getLineno() << endl;
+				}
+				else if (category == "final")
+				{
+					cout << "Class can't be inherited ! Error at line no: " << t->getLineno() << endl;
+				}
+				else
+				{
+					class_parent = t->getValuePart();
+				}
 				t->next();
 				if (inhrt_choice())
 				{
@@ -2557,6 +3175,22 @@ public:
 			t->next();
 			if (t->getClassPart() == "ID")
 			{
+				string type, category;
+				type = maintable->lookupMT(t->getValuePart(), &category);
+				if (type == "NULL")
+				{
+					cout << "Undeclared Identifier at Line no: " << t->getLineno() << endl;
+					return false;
+				}
+				else if (category == "final")
+				{
+					cout << "Class can't be inherited ! at line no: " << t->getLineno() << endl;
+					return false;
+				}
+				else
+				{
+					class_parent += t->getValuePart();
+				}
 				t->next();
 				if (inhrt_choice())
 				{
@@ -2573,8 +3207,11 @@ public:
 
 	bool CB()
 	{
+		class_category = "General";
+		class_access_modifier = "default";
 		if (t->getClassPart() == "static")
 		{
+			class_category = "static";
 			t->next();
 			if (CB_class())
 			{
@@ -2583,6 +3220,7 @@ public:
 		}
 		else if (t->getClassPart() == "private" || t->getClassPart() == "public" || t->getClassPart() == "protected")
 		{
+			class_access_modifier = t->getClassPart();
 			if (access_modifiers())
 			{
 				if (static_choice())
@@ -2673,6 +3311,7 @@ public:
 	{
 		if (t->getClassPart() == "public" || t->getClassPart() == "private" || t->getClassPart() == "protected")
 		{
+			class_access_modifier = t->getClassPart();
 			t->next();
 			return true;
 		}
@@ -2683,6 +3322,7 @@ public:
 	{
 		if (t->getClassPart() == "static")
 		{
+			class_category = "static";
 			t->next();
 			return true;
 		}
@@ -2697,6 +3337,7 @@ public:
 	{
 		if (t->getClassPart() == "DT")
 		{
+			ret_def = t->getValuePart();
 			t->next();
 			if (fn1())
 			{
@@ -2708,6 +3349,7 @@ public:
 		}
 		else if (t->getClassPart() == "void")
 		{
+			ret_def = t->getClassPart();
 			t->next();
 			if (func())
 			{
@@ -2719,6 +3361,7 @@ public:
 		}
 		else if (t->getClassPart() == "ID")
 		{
+			ret_def = t->getValuePart();
 			t->next();
 			if (fn2())
 			{
@@ -2735,6 +3378,7 @@ public:
 	{
 		if (t->getClassPart() == "ID")
 		{
+			class_name = t->getValuePart();
 			t->next();
 			if (fn_simple())
 			{
@@ -2746,10 +3390,16 @@ public:
 			t->next();
 			if (t->getClassPart() == "]")
 			{
+				ret_def += "[]";
 				t->next();
-				if (fn_arr())
+				if (t->getClassPart() == "ID")
 				{
-					return true;
+					class_name = t->getValuePart();
+					t->next();
+					if (fn_arr())
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -2760,6 +3410,7 @@ public:
 	{
 		if (t->getClassPart() == "ID")
 		{
+			class_name = t->getValuePart();
 			t->next();
 			if (fn2_simple())
 			{
@@ -2771,15 +3422,31 @@ public:
 			t->next();
 			if (t->getClassPart() == "]")
 			{
+				ret_def += "[]";
 				t->next();
-				if (fn2_arr())
+				if (t->getClassPart() == "ID")
 				{
-					return true;
+					class_name = t->getValuePart();
+					t->next();
+					if (fn2_arr())
+					{
+						return true;
+					}
 				}
 			}
 		}
 		else if (t->getClassPart() == "(")
 		{
+			current_scope = maintable->createScope();
+			classtable = maintable->findClassTable(my_stack.top());
+			if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
+			{
+				classtable->printClassTable();
+			}
+			else
+			{
+				cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+			}
 			t->next();
 			if (def())
 			{
@@ -2793,6 +3460,7 @@ public:
 						{
 							if (t->getClassPart() == "}")
 							{
+								current_scope = maintable->deleteScope();
 								t->next();
 								return true;
 							}
@@ -2808,9 +3476,19 @@ public:
 	{
 		if (t->getClassPart() == "(")
 		{
+			current_scope = maintable->createScope();
 			t->next();
 			if (def())
 			{
+				classtable = maintable->findClassTable(my_stack.top());
+				if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
+				{
+					classtable->printClassTable();
+				}
+				else
+				{
+					cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == ")")
 				{
 					t->next();
@@ -2821,6 +3499,7 @@ public:
 						{
 							if (t->getClassPart() == "}")
 							{
+								current_scope = maintable->deleteScope();
 								t->next();
 								return true;
 							}
@@ -2829,12 +3508,24 @@ public:
 				}
 			}
 		}
-		else if (init())
+		else if (t->getClassPart() == "=" || t->getClassPart() == "," || t->getClassPart() == ";")
+		{
+			classtable = maintable->findClassTable(my_stack.top());
+			if (classtable->insertCT(class_name, ret_def, class_access_modifier, class_category))
+			{
+				classtable->printClassTable();
+			}
+			else
+			{
+				cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+			}
+		if (init())
 		{
 			if (list())
 			{
 				return true;
 			}
+		}
 		}
 		return false;
 	}
@@ -2843,9 +3534,20 @@ public:
 	{
 		if (t->getClassPart() == "(")
 		{
+			current_scope = maintable->createScope();
 			t->next();
 			if (def())
 			{
+
+				classtable = maintable->findClassTable(my_stack.top());
+				if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
+				{
+				classtable->printClassTable();
+				}
+				else
+				{
+					cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == ")")
 				{
 					t->next();
@@ -2856,6 +3558,7 @@ public:
 						{
 							if (t->getClassPart() == "}")
 							{
+								current_scope = maintable->deleteScope();
 								t->next();
 								return true;
 							}
@@ -2864,11 +3567,23 @@ public:
 				}
 			}
 		}
-		else if (obj_init())
+		else if (t->getClassPart() == "=" || t->getClassPart() == "," || t->getClassPart() == ";")
 		{
-			if (obj_list())
+			classtable = maintable->findClassTable(my_stack.top());
+			if (classtable->insertCT(class_name, ret_def, class_access_modifier, class_category))
 			{
-				return true;
+				classtable->printClassTable();
+			}
+			else
+			{
+				cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+			}
+			if (obj_init())
+			{
+				if (obj_list())
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -2876,15 +3591,57 @@ public:
 
 	bool fn_arr()
 	{
-		if (func())
+		if (t->getClassPart() == "(")
 		{
-			return true;
-		}
-		else if (init_arr())
-		{
-			if (list_arr())
+			current_scope = maintable->createScope();
+			t->next();
+			if (def())
 			{
-				return true;
+				classtable = maintable->findClassTable(my_stack.top());
+				if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
+				{
+					classtable->printClassTable();
+				}
+				else
+				{
+					cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+				}
+				if (t->getClassPart() == ")")
+				{
+					t->next();
+					if (t->getClassPart() == "{")
+					{
+						t->next();
+						if (MST1())
+						{
+							if (t->getClassPart() == "}")
+							{
+								current_scope = maintable->deleteScope();
+								t->next();
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (t->getClassPart() == "=" || t->getClassPart() == "," || t->getClassPart() == ";")
+		{
+			classtable = maintable->findClassTable(my_stack.top());
+			if (classtable->insertCT(class_name, ret_def, class_access_modifier, class_category))
+			{
+				classtable->printClassTable();
+			}
+			else
+			{
+				cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+			}
+			if (init_arr())
+			{
+				if (list_arr())
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -2892,15 +3649,57 @@ public:
 
 	bool fn2_arr()
 	{
-		if (func())
+		if (t->getClassPart() == "(")
 		{
-			return true;
-		}
-		else if (obj_init_arr())
-		{
-			if (obj_list_arr())
+			current_scope = maintable->createScope();
+			t->next();
+			if (def())
 			{
-				return true;
+				classtable = maintable->findClassTable(my_stack.top());
+				if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
+				{
+					classtable->printClassTable();
+				}
+				else
+				{
+					cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+				}
+				if (t->getClassPart() == ")")
+				{
+					t->next();
+					if (t->getClassPart() == "{")
+					{
+						t->next();
+						if (MST1())
+						{
+							if (t->getClassPart() == "}")
+							{
+								current_scope = maintable->deleteScope();
+								t->next();
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (t->getClassPart() == "=" || t->getClassPart() == "," || t->getClassPart() == ";")
+		{
+			classtable = maintable->findClassTable(my_stack.top());
+			if (classtable->insertCT(class_name, ret_def, class_access_modifier, class_category))
+			{
+				classtable->printClassTable();
+			}
+			else
+			{
+				cout << "Redeclaration Error at Line No: " << t->getLineno() << endl;
+			}
+			if (obj_init_arr())
+			{
+				if (obj_list_arr())
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -2948,6 +3747,72 @@ public:
 			}
 		}
 		return false;
+	}
+
+
+	string compatibilityCheck(string leftType, string rightType, string Operator)
+	{
+		if ((leftType == "int" && rightType == "int") && 
+			(Operator == "+" || Operator == "-" || Operator == "*" || Operator == "/" || Operator == "%" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "=" || Operator == "&&" || Operator == "||"))
+		{
+			return "int";
+		}
+		else if (((leftType == "int" && rightType == "float") || (leftType == "float" && rightType == "int") || (leftType == "float" && rightType == "float")) && 
+			(Operator == "+" || Operator == "-" || Operator == "*" || Operator == "/" || Operator == "%" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "=" || Operator == "&&" || Operator == "||"))
+		{
+			return "float";
+		}
+		else if ((leftType == "string" && rightType == "string") && 
+			(Operator == "+" ||  Operator == "=" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "&&" || Operator == "||"))
+		{
+			return "string";
+		}
+		else if (((leftType == "int" && rightType == "string") || (leftType == "string" && rightType == "int") || (leftType == "string" && rightType == "string")) &&
+			(Operator == "+" || Operator == "&&" || Operator == "||"))
+		{
+			return "float";
+		}
+		else if (leftType == "bool" && rightType == "bool" && 
+			(Operator == "=" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "&&" || Operator == "||"))
+		{
+			return "bool";
+		}
+		else if (leftType == "char" && rightType == "char" && 
+			(Operator == "=" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "&&" || Operator == "||"))
+		{
+			return "char";
+		}
+		return "Incompatible";
+	}
+
+
+	string ConstType(string type)
+	{
+		if (type == "int_const")
+		{
+			return "int";
+		}
+
+		if (type == "float_const")
+		{
+			return "float";
+		}
+
+		if (type == "string_const")
+		{
+			return "string";
+		}
+
+		if (type == "char_const")
+		{
+			return "char";
+		}
+
+		if (type == "true" || type =="false")
+		{
+			return "bool";
+		}
+		return "none";
 	}
 };
 

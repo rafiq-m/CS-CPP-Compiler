@@ -5,4 +5,6 @@ C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(51,26): warning C4129: 
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(51,50): warning C4129:  '/': unrecognized character escape sequence
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(66,20): warning C4129:  '/': unrecognized character escape sequence
 C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\WordBreak.h(66,44): warning C4129:  '/': unrecognized character escape sequence
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\ClassTable.h(85,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\Rafiq\Desktop\MyCompiler\MyCompiler\ClassTable.h(90,22): warning C4018:  '<': signed/unsigned mismatch
   MyCompiler.vcxproj -> C:\Users\Rafiq\Desktop\MyCompiler\Debug\MyCompiler.exe

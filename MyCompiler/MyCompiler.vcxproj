@@ -154,7 +154,10 @@
     <ClCompile Include="MyCompiler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClassTable.h" />
+    <ClInclude Include="FunctionTable.h" />
     <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="MainTable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SyntaxAnalyzer.h" />
     <ClInclude Include="Token.h" />

@@ -1,4 +1,54 @@
-namespace id{
+namespace ID{
+	class B 
+	{ 
+		void hello(int a, int b)
+		{
+			int i = a < 3;
+		}
+		
+
+
+	}	
+}
+
+
+
+
+/*int[] a = {2,3};
+		int ab =2;
+		obj haha = 2;
+		obj[] abc = new obj[2]{2,2};
+		int[] fn(){}
+		obj[] hello(int b, int a){ }
+		void abc(int b , int a) { }
+		void rafiq(int a, int b) 
+		 {
+		 }
+		int areeb(){}
+	}
+	static class A extends B
+	{
+		int a(int a,int b) { }
+		int abc(int a, int b)
+		{
+		}
+		class BC{
+				int a;
+			}
+	}
+	class C 
+	{
+		void samsung(int a) { }
+		void add(int a , obj b){ }
+		int subtract(int a, obj b) 
+		{
+		}
+	}
+}
+
+
+
+/*namespace id{
 class A
 {
 int main(string[] arr){for(console.write().a++;;){  }   } 
