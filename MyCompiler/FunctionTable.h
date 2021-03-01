@@ -59,9 +59,9 @@ public:
 		}
 		return "NULL";
 	}
-	void printFunctionTable()
+	void printFunctionTable(string className)
 	{
-		cout << "-------printing Function Table--------" << endl;
+		cout << "-------printing Function Table of Class: " << className <<"--------" << endl;
 		for (auto i = functiontable.begin(); i != functiontable.end(); ++i)
 		{
 			cout << i->name << "\t" << i->type << "\t" << "\t" << i->scope << endl;

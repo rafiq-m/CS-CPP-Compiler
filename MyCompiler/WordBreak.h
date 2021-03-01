@@ -149,13 +149,13 @@ class WordBreak
 					token.generateToken("inc_dec", string(1, words[i]) + words[i + 1], lineNo);
 					i++;
 				}
-				else if(words[i] == '+' || words[i] == '-')
+				else if (words[i] == '+' || words[i] == '-')
 				{
 					temp += words[i];
-					if (regex_match(string(1,words[i+1]), isdigit) && (token.getprev() == "=" ||
-						token.getprev() == "," || token.getprev() == "["  || token.getprev() == "(" ||
+					if (regex_match(string(1, words[i + 1]), isdigit) && (token.getprev() == "=" ||
+						token.getprev() == "," || token.getprev() == "[" || token.getprev() == "(" ||
 						token.getprev() == "{"))
-					{	
+					{
 						/*i++;
 						while (regex_match(string(1, words[i]), isdigit))
 						{
@@ -168,6 +168,7 @@ class WordBreak
 						token.generateToken("pm", temp, lineNo);
 						temp = "";
 					}
+
 				}
 				else 
 				{
@@ -334,11 +335,6 @@ class WordBreak
 		}
 		token.generateToken(temp, lineNo);
 	}
-
-	/*void show()
-	{
-		token.printList();
-	}*/
 
 	LinkedList* getTokens() 
 	{
