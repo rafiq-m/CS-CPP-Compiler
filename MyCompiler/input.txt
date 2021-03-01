@@ -1,40 +1,93 @@
 namespace ID{
-	class B 
-	{ 
-		void hello(int a, int b)
+	static class A 
+	{
+string a;
+char bc() {
+return a;
+}
+		bool a ;
+		int a = +3-3;
+		static public int[] a0 = { 1, 2, 3 , 4 };
+		int a = 2;
+		int b = 2;
+		public static int[] a1 = new int[4]{ 2,3,4,5};
+		static int[] a2 = new int[2];
+		public int a3 = 4;
+		public int a4 = 2;
+		public int a5 = a3 + a4;
+		Student[] student = new student[3]{ a , b , sa.add(sa), new student() }, student1 = new student[2] ;
+		public static int[] hello(int a6, int a7, int[] a8, obj a9, obj[] a10)
 		{
-			int i = a < 3;
+			a5 = a6 < 3;
+			a.fn().a[2].fn(a,b,a-b)[2].a = a-b + c;	
+			for(obj[] obj = new obj[2]{a,b}; a.fn()[2] >= a[a+b].fn(a,b) ; i++ , this.i++ , ++this.i , new student())
+			{
+				continue;
+				break;
+				if(a < b)
+				{
+					this.i++;
+				}
+				else if(a + b - c != 2)
+				{
+					int[] a = new int[2];
+				}
+				else 
+				{
+					int ab = a + b - c;
+				}
+			}
+			return new student[2] { a, new student() };
+		}
+		class A
+		{
+			int a;
+			obj[] a = new obj[2];
 		}
 		
-
-
-	}	
-}
-
-
-
-
-/*int[] a = {2,3};
-		int ab =2;
-		obj haha = 2;
-		obj[] abc = new obj[2]{2,2};
-		int[] fn(){}
-		obj[] hello(int b, int a){ }
-		void abc(int b , int a) { }
-		void rafiq(int a, int b) 
-		 {
-		 }
-		int areeb(){}
 	}
-	static class A extends B
+	static class B extends A
 	{
-		int a(int a,int b) { }
-		int abc(int a, int b)
+		public static main(string[] args)
 		{
+			try
+            		{
+				int a = 2;
+                		int b = 2 + 3;
+            		}
+            		catch(Exception e)
+            		{
+                		try
+                		{
+                    			while(a < b)
+                    			{
+                        			i++;
+                        			this.i++;
+                        			this.a.fn().a[2].fn(2, 3)[2] = a.bc();
+                    			}
+                		}
+               			 catch(Exception e)
+                		{
+                  			 student[] s = new student[2], s1 = { s[1] };
+               			}
+            		}			
+            		catch(Exception e)
+           		{
+            		    a.fn().a++;
+       			}
+            		finally
+            		{
+               			try
+              			{ 
+                    			int a= 2;
+                		}
+                		catch(Exception e)
+                		{
+                    			int b = 23;
+                		}
+          		}
 		}
-		class BC{
-				int a;
-			}
+		
 	}
 	class C 
 	{
@@ -42,23 +95,9 @@ namespace ID{
 		void add(int a , obj b){ }
 		int subtract(int a, obj b) 
 		{
+			a = a - 1;
 		}
 	}
-}
-
-
-
-/*namespace id{
-class A
-{
-int main(string[] arr){for(console.write().a++;;){  }   } 
-
-
-class b{  static public int[] hello(int[] a){ int[] a = new int[2];this.i++;this.i.fn().a[2] = 2 + 3 / 2;for(student[] s = new student[2]{2,3};true == true;){ }}}
-
-}
-
-class d{int main(){i++;}}
 }
 
 

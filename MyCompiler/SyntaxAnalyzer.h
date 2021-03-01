@@ -93,7 +93,6 @@ public:
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					if (functiontable->insertFT(name, type, current_scope))
 					{
-						functiontable->printFunctionTable();
 					}
 					else
 					{
@@ -116,7 +115,6 @@ public:
 			functiontable = maintable->findFunctionTable(my_stack.top());
 			if (functiontable->insertFT(name, type, current_scope))
 			{
-				functiontable->printFunctionTable();
 			}
 			else
 			{
@@ -142,8 +140,13 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				string TR = compatibilityCheck(T4, type, "=");
+				if (TR == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				return true;
-			}
+			}			
 		}
 		else if (t->getClassPart() == ";" || t->getClassPart() == ",")
 		{
@@ -555,10 +558,15 @@ public:
 		{
 			t->next();
 			string T4 = "";
-			if (F(T))
+			if (F(T4))
 			{
+				T = compatibilityCheck(T4, "!");
+				if (T == "NULL")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				return true;
-			}
+			}	
 		}
 		else if (t->getClassPart() == "this" || t->getClassPart() == "ID")
 		{
@@ -576,9 +584,10 @@ public:
 						T = classtable->lookUpCT(name);
 						if (T == "NULL")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Variable named: "<< name <<  " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
+					global_type = T;
 					t->next();
 					if (XY())
 					{
@@ -594,6 +603,24 @@ public:
 			{
 				if (t->getClassPart() == "ID")
 				{
+					name = t->getValuePart();
+					functiontable = maintable->findFunctionTable(my_stack.top());
+					stack<int> scope = maintable->stack_scope;
+					T = functiontable->lookUpFT(name, current_scope, scope);
+					if (T == "NULL")
+					{
+						classtable = maintable->findClassTable(my_stack.top());
+						T = classtable->lookUpCT(name);
+						if (T == "NULL")
+						{
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
+					}
+					T = compatibilityCheck(T, "inc_dec");
+					if (T == "Incompatible")
+					{
+						cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+					}
 					t->next();
 					if (X())
 					{
@@ -652,6 +679,11 @@ public:
 		}
 		else if (t->getClassPart() == "inc_dec")
 		{
+			string T1 = compatibilityCheck(global_type, "inc_dec");
+			if (T1 == "Incompatible")
+			{
+				cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+			}
 			t->next();
 			return true;
 		}
@@ -991,6 +1023,12 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+
+				string TR = compatibilityCheck(T4, type, "=");
+				if (TR == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				return true;
 			}
 		}
@@ -1245,16 +1283,22 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
-						functiontable->printFunctionTable();
+						classtable = maintable->findClassTable(my_stack.top());
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
+						{
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
 					}
 					else
 					{
-						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						string T1 = compatibilityCheck(global_type, "inc_dec");
+						if (T1 == "Incompatible")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -1280,16 +1324,14 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
-					{
-						functiontable->printFunctionTable();
-					}
-					else
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
 						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -1303,6 +1345,7 @@ public:
 		else if (t->getClassPart() == "ID")
 		{
 			type = t->getValuePart();
+			name = t->getValuePart();
 			t->next();
 			if (ZZZ())
 			{
@@ -1354,13 +1397,16 @@ public:
 		{
 			name = t->getValuePart();
 			functiontable = maintable->findFunctionTable(my_stack.top());
-			if (functiontable->insertFT(name, type, current_scope))
+			stack<int> scope = maintable->stack_scope;
+			global_type = functiontable->lookUpFT(name, current_scope, scope);
+			if (global_type == "NULL")
 			{
-				functiontable->printFunctionTable();
-			}
-			else
-			{
-				cout << "Variable Redeclration Error at Line no: " << t->getLineno() << endl;
+				classtable = maintable->findClassTable(my_stack.top());
+				global_type = classtable->lookUpCT(name);
+				if (global_type == "NULL")
+				{
+					cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
+				}
 			}
 			t->next();
 			if (obj_init())
@@ -1383,19 +1429,24 @@ public:
 		{
 			functiontable = maintable->findFunctionTable(my_stack.top());
 			stack<int> scope = maintable->stack_scope;
-			if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
-			{
-				functiontable->printFunctionTable();
-			}
-			else
+			global_type = functiontable->lookUpFT(type, current_scope, scope);
+			if (global_type == "NULL")
 			{
 				classtable = maintable->findClassTable(my_stack.top());
-				if (classtable->lookUpCT(name) == "NULL")
+				global_type = classtable->lookUpCT(type);
+				if (global_type == "NULL")
 				{
-					cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+					cout << "Variable named: " << type << " is Undeclared ! at line number: " << t->getLineno() << endl;
 				}
 			}
-			t->next();
+			if (t->getClassPart() == "inc_dec")
+			{
+				string t1 = compatibilityCheck(global_type, "inc_dec");
+				if(t1 == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
+			}
 			if (XY1_SST())
 			{
 				return true;
@@ -1448,7 +1499,6 @@ public:
 				functiontable = maintable->findFunctionTable(my_stack.top());
 				if (functiontable->insertFT(name, type, current_scope))
 				{
-					functiontable->printFunctionTable();
 				}
 				else
 				{
@@ -1498,6 +1548,11 @@ public:
 		}
 		else if (t->getClassPart() == "inc_dec")
 		{
+			string t1 = compatibilityCheck(name, "inc_dec");
+			if (t1 == "Incompatible")
+			{
+				cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+			}
 			t->next();
 			if (t->getClassPart() == ";")
 			{
@@ -1511,6 +1566,11 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				string TR = compatibilityCheck(T4, global_type, "=");
+				if (TR == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == ";")
 				{
 					t->next();
@@ -1571,6 +1631,11 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				string TR = compatibilityCheck(T4, global_type, "=");
+				if (TR == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == ";")
 				{
 					t->next();
@@ -1695,16 +1760,22 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
-						functiontable->printFunctionTable();
+						classtable = maintable->findClassTable(my_stack.top());
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
+						{
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
 					}
 					else
 					{
-						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						string T1 = compatibilityCheck(global_type, "inc_dec");
+						if (T1 == "Incompatible")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -1739,16 +1810,14 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
-					{
-						functiontable->printFunctionTable();
-					}
-					else
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
 						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -1788,7 +1857,6 @@ public:
 			functiontable = maintable->findFunctionTable(my_stack.top());
 			if (functiontable->insertFT(name, type, current_scope))
 			{
-				functiontable->printFunctionTable();
 			}
 			else
 			{
@@ -1862,7 +1930,6 @@ public:
 				functiontable = maintable->findFunctionTable(my_stack.top());
 				if (functiontable->insertFT(name, type, current_scope))
 				{
-					functiontable->printFunctionTable();
 				}
 				else
 				{
@@ -1925,6 +1992,11 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				string TR = compatibilityCheck(T4, global_type, "=");
+				if (TR == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == ";")
 				{
 					t->next();
@@ -1985,6 +2057,11 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				string TR = compatibilityCheck(T4, global_type, "=");
+				if (TR == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == ";")
 				{
 					t->next();
@@ -2036,6 +2113,11 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				string TR = compatibilityCheck(T4, global_type, "=");
+				if (TR == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == ";")
 				{
 					t->next();
@@ -2045,6 +2127,11 @@ public:
 		}
 		else if (t->getClassPart() == "inc_dec")
 		{
+			string T1 = compatibilityCheck(name, "inc_dec");
+			if (T1 == "Incompatible")
+			{
+				cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+			}
 			t->next();
 			if (t->getClassPart() == ";")
 			{
@@ -2086,16 +2173,14 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
-					{
-						functiontable->printFunctionTable();
-					}
-					else
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
 						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -2122,16 +2207,22 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
-						functiontable->printFunctionTable();
+						classtable = maintable->findClassTable(my_stack.top());
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
+						{
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
 					}
 					else
 					{
-						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						string T1 = compatibilityCheck(global_type, "inc_dec");
+						if (T1 == "Incompatible")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -2179,6 +2270,11 @@ public:
 	{
 		if (t->getClassPart() == "inc_dec")
 		{
+			string T1 = compatibilityCheck(name, "inc_dec");
+			if (T1 == "Incompatible")
+			{
+				cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+			}
 			t->next();
 			return true;
 		}
@@ -2188,6 +2284,11 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				string TR = compatibilityCheck(T4, global_type, "=");
+				if (TR == "Incompatible")
+				{
+					cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				return true;
 			}
 		}
@@ -2225,16 +2326,14 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
-					{
-						functiontable->printFunctionTable();
-					}
-					else
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
 						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -2261,16 +2360,22 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
-						functiontable->printFunctionTable();
+						classtable = maintable->findClassTable(my_stack.top());
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
+						{
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
 					}
 					else
 					{
-						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						string T1 = compatibilityCheck(global_type, "inc_dec");
+						if (T1 == "Incompatible")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -2659,7 +2764,6 @@ public:
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					if (functiontable->insertFT(name, type, current_scope))
 					{
-						functiontable->printFunctionTable();
 					}
 					else
 					{
@@ -2695,7 +2799,6 @@ public:
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					if (functiontable->insertFT(name, type, current_scope))
 					{
-						functiontable->printFunctionTable();
 					}
 					else
 					{
@@ -2751,16 +2854,22 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
-						functiontable->printFunctionTable();
+						classtable = maintable->findClassTable(my_stack.top());
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
+						{
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
+						}
 					}
 					else
 					{
-						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						string T1 = compatibilityCheck(global_type, "inc_dec");
+						if (T1 == "Incompatible")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Type is incompatible at Line No: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -2786,16 +2895,14 @@ public:
 					name = t->getValuePart();
 					functiontable = maintable->findFunctionTable(my_stack.top());
 					stack<int> scope = maintable->stack_scope;
-					if (functiontable->lookUpFT(name, current_scope, scope) != "NULL")
-					{
-						functiontable->printFunctionTable();
-					}
-					else
+					global_type = functiontable->lookUpFT(name, current_scope, scope);
+					if (global_type == "NULL")
 					{
 						classtable = maintable->findClassTable(my_stack.top());
-						if (classtable->lookUpCT(name) == "NULL")
+						global_type = classtable->lookUpCT(name);
+						if (global_type == "NULL")
 						{
-							cout << "Variable is Undeclared ! at line number: " << t->getLineno() << endl;
+							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
 					t->next();
@@ -2876,7 +2983,6 @@ public:
 					classtable = maintable->findClassTable(my_stack.top());
 					if (classtable->insertCT(func_name, type_def + "->" + ret_def, class_access_modifier, class_category))
 					{
-						classtable->printClassTable();
 					}
 					else
 					{
@@ -2931,6 +3037,11 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				string t1 = compatibilityCheck(ret_def, T4, "=");
+				if (t1 == "Incompatible")
+				{
+					cout << "Method Return type: " << ret_def << " is incompatible at Line No: " << t->getLineno() << " of return Expression type: " << T4 << endl;
+				}
 				return true;
 			}
 		}
@@ -3103,6 +3214,11 @@ public:
 						{
 							if (t->getClassPart() == "}")
 							{
+
+								functiontable = maintable->findFunctionTable(my_stack.top());
+								functiontable->printFunctionTable(my_stack.top());
+								classtable = maintable->findClassTable(my_stack.top());
+								classtable->printClassTable(my_stack.top());
 								current_scope = maintable->deleteScope();
 								class_name = my_stack.top();
 								my_stack.pop();
@@ -3338,6 +3454,7 @@ public:
 		if (t->getClassPart() == "DT")
 		{
 			ret_def = t->getValuePart();
+			type = t->getValuePart();
 			t->next();
 			if (fn1())
 			{
@@ -3441,7 +3558,6 @@ public:
 			classtable = maintable->findClassTable(my_stack.top());
 			if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
 			{
-				classtable->printClassTable();
 			}
 			else
 			{
@@ -3483,7 +3599,6 @@ public:
 				classtable = maintable->findClassTable(my_stack.top());
 				if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
 				{
-					classtable->printClassTable();
 				}
 				else
 				{
@@ -3513,7 +3628,6 @@ public:
 			classtable = maintable->findClassTable(my_stack.top());
 			if (classtable->insertCT(class_name, ret_def, class_access_modifier, class_category))
 			{
-				classtable->printClassTable();
 			}
 			else
 			{
@@ -3542,7 +3656,6 @@ public:
 				classtable = maintable->findClassTable(my_stack.top());
 				if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
 				{
-				classtable->printClassTable();
 				}
 				else
 				{
@@ -3572,7 +3685,6 @@ public:
 			classtable = maintable->findClassTable(my_stack.top());
 			if (classtable->insertCT(class_name, ret_def, class_access_modifier, class_category))
 			{
-				classtable->printClassTable();
 			}
 			else
 			{
@@ -3600,7 +3712,6 @@ public:
 				classtable = maintable->findClassTable(my_stack.top());
 				if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
 				{
-					classtable->printClassTable();
 				}
 				else
 				{
@@ -3630,7 +3741,6 @@ public:
 			classtable = maintable->findClassTable(my_stack.top());
 			if (classtable->insertCT(class_name, ret_def, class_access_modifier, class_category))
 			{
-				classtable->printClassTable();
 			}
 			else
 			{
@@ -3658,7 +3768,6 @@ public:
 				classtable = maintable->findClassTable(my_stack.top());
 				if (classtable->insertCT(class_name, type_def + "->" + ret_def, class_access_modifier, class_category))
 				{
-					classtable->printClassTable();
 				}
 				else
 				{
@@ -3688,7 +3797,6 @@ public:
 			classtable = maintable->findClassTable(my_stack.top());
 			if (classtable->insertCT(class_name, ret_def, class_access_modifier, class_category))
 			{
-				classtable->printClassTable();
 			}
 			else
 			{
@@ -3749,28 +3857,41 @@ public:
 		return false;
 	}
 
+	string compatibilityCheck(string type, string Operator)
+	{
+		if ((type == "int"  || type == "float" || type == "char") && (Operator == "inc_dec"))
+		{
+			return type;
+		}
+		else if ((type == "int" || type == "bool" || type == "float" || type == "char") && (Operator == "!"))
+		{
+			return "bool";
+		}
+		return "Incompatible";
+	}
 
 	string compatibilityCheck(string leftType, string rightType, string Operator)
 	{
-		if ((leftType == "int" && rightType == "int") && 
-			(Operator == "+" || Operator == "-" || Operator == "*" || Operator == "/" || Operator == "%" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "=" || Operator == "&&" || Operator == "||"))
+		if (leftType == "int" && rightType == "int")
 		{
-			return "int";
+			if (Operator == "+" || Operator == "-" || Operator == "*" || Operator == "/" || Operator == "%" || Operator == "=")
+				return "int";
+			if (Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "=")
+				return "bool";
 		}
-		else if (((leftType == "int" && rightType == "float") || (leftType == "float" && rightType == "int") || (leftType == "float" && rightType == "float")) && 
-			(Operator == "+" || Operator == "-" || Operator == "*" || Operator == "/" || Operator == "%" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "=" || Operator == "&&" || Operator == "||"))
+		else if ((leftType == "int" && rightType == "float") || (leftType == "float" && rightType == "int") || (leftType == "float" && rightType == "float"))
 		{
-			return "float";
+			if(Operator == "+" || Operator == "-" || Operator == "*" || Operator == "/" || Operator == "%" ||  Operator == "=" )
+				return "float";
+			if (Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==")
+				return "bool";
 		}
-		else if ((leftType == "string" && rightType == "string") && 
-			(Operator == "+" ||  Operator == "=" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "&&" || Operator == "||"))
+		else if ((leftType == "string" && rightType == "string"))
 		{
-			return "string";
-		}
-		else if (((leftType == "int" && rightType == "string") || (leftType == "string" && rightType == "int") || (leftType == "string" && rightType == "string")) &&
-			(Operator == "+" || Operator == "&&" || Operator == "||"))
-		{
-			return "float";
+			if(Operator == "+")
+				return "string";
+			if (Operator == "=" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==")
+				return "bool";
 		}
 		else if (leftType == "bool" && rightType == "bool" && 
 			(Operator == "=" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "&&" || Operator == "||"))
@@ -3780,11 +3901,10 @@ public:
 		else if (leftType == "char" && rightType == "char" && 
 			(Operator == "=" || Operator == "<" || Operator == ">" || Operator == "<=" || Operator == ">=" || Operator == "!=" || Operator == "==" || Operator == "&&" || Operator == "||"))
 		{
-			return "char";
+			return "bool";
 		}
 		return "Incompatible";
 	}
-
 
 	string ConstType(string type)
 	{

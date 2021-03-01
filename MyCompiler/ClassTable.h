@@ -68,9 +68,9 @@ public:
 		}
 		return "NULL";
 	}
-	void printClassTable()
+	void printClassTable(string className)
 	{
-		cout << "-------printing Class Table--------" << endl;
+		cout << "-------printing Class Table of Class: " << className << "--------" << endl;
 		for (auto i = class_table.begin(); i != class_table.end(); ++i)
 		{
 			cout << i->name << "\t\t\t" << i->type << "\t\t\t" << i->access_modifier << "\t\t\t" << i->type_modifier << endl;
