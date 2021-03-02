@@ -1,12 +1,11 @@
 namespace ID{
 	static class A 
 	{
-string a;
-char bc() {
-return a;
-}
-		bool a ;
 		int a = +3-3;
+		int c = 2;
+		int ac = a +c;
+		obj[] a = new obj[2];
+		bool a ;
 		static public int[] a0 = { 1, 2, 3 , 4 };
 		int a = 2;
 		int b = 2;
@@ -18,8 +17,10 @@ return a;
 		Student[] student = new student[3]{ a , b , sa.add(sa), new student() }, student1 = new student[2] ;
 		public static int[] hello(int a6, int a7, int[] a8, obj a9, obj[] a10)
 		{
+			a  = 2;
 			a5 = a6 < 3;
-			a.fn().a[2].fn(a,b,a-b)[2].a = a-b + c;	
+			int i = 0;	
+			int abcs = a +c-c;
 			for(obj[] obj = new obj[2]{a,b}; a.fn()[2] >= a[a+b].fn(a,b) ; i++ , this.i++ , ++this.i , new student())
 			{
 				continue;
@@ -39,7 +40,7 @@ return a;
 			}
 			return new student[2] { a, new student() };
 		}
-		class A
+		class D
 		{
 			int a;
 			obj[] a = new obj[2];

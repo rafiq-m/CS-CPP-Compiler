@@ -49,7 +49,7 @@ public:
 		{
 			for (auto i = functiontable.begin(); i != functiontable.end(); ++i)
 			{
-				if (i->name == name)
+				if (i->name == name && i->scope == scope)
 				{
 					return i->type;
 				}
