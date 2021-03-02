@@ -35,12 +35,24 @@ public:
 		if (S())
 		{
 			if (t->getClassPart() == "$")
-				cout << "Okay All correct !" << endl;
+			{
+				cout << "-----------------------------------" << endl;
+				cout << "--All Correct, No Error in Syntax--" << endl;
+				cout << "-----------------------------------" << endl;
+			}
 			else
+			{
+				cout << "---------------------------" << endl;
 				cout << "Error at Line No: " << t->getLineno() << "   " << t->getClassPart() << endl;
+				cout << "---------------------------" << endl;
+			}
 		}
 		else
+		{
+			cout << "---------------------------" << endl;
 			cout << "Error at Line No: " << t->getLineno() << "   " << t->getClassPart() << endl;
+			cout << "---------------------------" << endl;
+		}
 		maintable->printMainTable();
 	}
 
@@ -236,6 +248,10 @@ public:
 					string T4 = "";
 					if (OE(T4))
 					{
+						if (T4 != "int")
+						{
+							cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+						}
 						if (t->getClassPart() == "]")
 						{
 							t->next();
@@ -818,6 +834,10 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				if (T4 != "int")
+				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == "]")
 				{
 					t->next();
@@ -908,6 +928,10 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				if (T4 != "int")
+				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == "]")
 				{
 					t->next();
@@ -1116,6 +1140,10 @@ public:
 					string T4 = "";
 					if (OE(T4))
 					{
+						if (T4 != "int")
+						{
+							cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+						}
 						if (t->getClassPart() == "]")
 						{
 							t->next();
@@ -1293,7 +1321,7 @@ public:
 							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
-					else
+					if(global_type != "NULL")
 					{
 						string T1 = compatibilityCheck(global_type, "inc_dec");
 						if (T1 == "Incompatible")
@@ -1479,6 +1507,10 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				if (T4 != "int")
+				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == "]")
 				{
 					t->next();
@@ -1584,6 +1616,10 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				if (T4 != "int")
+				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == "]")
 				{
 					t->next();
@@ -1666,8 +1702,12 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
-				if (t->getClassPart() == "]")
+				if (T4 != "int")
 				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
+				if (t->getClassPart() == "]")
+				{			
 					t->next();
 					if (XY1_SST())
 					{
@@ -1770,7 +1810,7 @@ public:
 							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
-					else
+					if (global_type != "NULL")
 					{
 						string T1 = compatibilityCheck(global_type, "inc_dec");
 						if (T1 == "Incompatible")
@@ -1910,6 +1950,10 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				if (T4 != "int")
+				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == "]")
 				{
 					t->next();
@@ -2010,8 +2054,13 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				if (T4 != "int")
+				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == "]")
 				{
+
 					t->next();
 					if (for_XY1_SST())
 					{
@@ -2092,6 +2141,10 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				if (T4 != "int")
+				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == "]")
 				{
 					t->next();
@@ -2217,7 +2270,7 @@ public:
 							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
-					else
+					if (global_type != "NULL")
 					{
 						string T1 = compatibilityCheck(global_type, "inc_dec");
 						if (T1 == "Incompatible")
@@ -2370,7 +2423,7 @@ public:
 							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
-					else
+					if (global_type != "NULL")
 					{
 						string T1 = compatibilityCheck(global_type, "inc_dec");
 						if (T1 == "Incompatible")
@@ -2864,7 +2917,7 @@ public:
 							cout << "Variable named: " << name << " is Undeclared ! at line number: " << t->getLineno() << endl;
 						}
 					}
-					else
+					if (global_type != "NULL")
 					{
 						string T1 = compatibilityCheck(global_type, "inc_dec");
 						if (T1 == "Incompatible")
@@ -3079,6 +3132,10 @@ public:
 				string T4 = "";
 				if (OE(T4))
 				{
+					if (T4 != "int")
+					{
+						cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+					}
 					if (t->getClassPart() == "]")
 					{
 						t->next();
@@ -3113,6 +3170,10 @@ public:
 			string T4 = "";
 			if (OE(T4))
 			{
+				if (T4 != "int")
+				{
+					cout << "Inside Array Index, Type is incompatible at Line No: " << t->getLineno() << endl;
+				}
 				if (t->getClassPart() == "]")
 				{
 					t->next();
@@ -3842,11 +3903,13 @@ public:
 				t->next();
 				if (t->getClassPart() == "{")
 				{
+					current_scope = maintable->createScope();
 					t->next();
 					if (class_rep())
 					{
 						if (t->getClassPart() == "}")
 						{
+							current_scope = maintable->deleteScope();
 							t->next();
 							return true;
 						}
@@ -3935,4 +3998,3 @@ public:
 		return "none";
 	}
 };
-

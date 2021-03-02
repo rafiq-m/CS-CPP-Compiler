@@ -8,7 +8,7 @@
 using namespace std;
 
 
-static int stackSize = 1;
+static int stackSize = 0;
 class MNode
 {
 public:
