@@ -1,10 +1,12 @@
 namespace ID{
-	static class A 
+
+	final class A 
 	{
 		int a = +3-3;
 		int c = 2;
 		int ac = a +c;
-		obj[] a = new obj[2];
+		obj a;
+		obj a;
 		bool a ;
 		static public int[] a0 = { 1, 2, 3 , 4 };
 		int a = 2;
@@ -15,7 +17,7 @@ namespace ID{
 		public int a4 = 2;
 		public int a5 = a3 + a4;
 		Student[] student = new student[3]{ a , b , sa.add(sa), new student() }, student1 = new student[2] ;
-		public static int[] hello(int a6, int a7, int[] a8, obj a9, obj[] a10)
+		public static char hello(int a6, int a7, int[] a8, obj a9, obj[] a10)
 		{
 			a  = 2;
 			a5 = a6 < 3;
@@ -27,7 +29,7 @@ namespace ID{
 				break;
 				if(a < b)
 				{
-					this.i++;
+					++this.i.fn().arr[a.b.fn(a.fn()+a.b-34,b.x.y-a()[3])];
 				}
 				else if(a + b - c != 2)
 				{
@@ -35,10 +37,10 @@ namespace ID{
 				}
 				else 
 				{
-					int ab = a + b - c;
+					int ab = a + b() - c;
 				}
 			}
-			return new student[2] { a, new student() };
+			return 5;
 		}
 		class D
 		{
